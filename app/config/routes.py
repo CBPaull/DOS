@@ -1,46 +1,53 @@
-"""
-    Routes Configuration File
-
-    Put Routing rules here
-"""
 from system.core.router import routes
 
-"""
-    This is where you define routes
-    
-    Start by defining the default controller
-    Pylot will look for the index method in the default controller to handle the base route
+# Default Welcome Page.  Render
+routes['default_controller'] = 'Users'
+# Login Registration Page. Render
+routes['/users/logreg'] = 'Users#logreg'
+# Show User page. Render
+routes['/users/show/<user_id>'] 'Users#show'
+# Edit User page. Render
+routes['/users/edit/<user_id>'] 'Users#edit'
+# Show Vendor page. Render
+routes['/users/vendor/<user_id>'] = 'Users#vendor'
+# Show Contractor page. Render
+routes['/users/contractor'] = 'Users#contractor'
+# Show search page. Render
+routes['/search'] = 'Users#search'
+# List of all users. Render
+routes['/users/userlist'] 'Users#userlist'
+# Page for adding new job. Render.
+routes['/jobs/addnew'] = 'Jobs#addnew'
+# Show wall of jobs. Render
+routes['/jobs/joblist'] = 'Jobs#Joblist'
+# Show job by job_id
+routes['/jobs/show/<job_id>'] = 'Jobs#view'
+# Edit job by job_id
+routes['/jobs/edit/<job_id>'] = 'Jobs#view'
+# Process create user.
+routes['POST']['/users/add']='Users#add'
+# Process Login user.
+routes['POST']['/users/login']='Users#login'
+# Process logout user.
+routes['POST']['/users/logout']='Users#logout'
+# Process Update user.
+routes['POST']['/users/update/<user_id>'] = 'Users#update'
+# Process Update user address
+routes['POST']['/users/update_address/<user_id>'] = 'Users#update_address'
+# Process Create Job.
+routes['POST']['/jobs/add'] = 'Jobs#add'
+# Process update job.
+routes['POST']['/jobs/update/<job_id>'] = 'Jobs#update'
+# Process job status. (Change job status)
+routes['POST']['/jobs/update_status/<job_id>'] = 'Jobs#confirm'
+# Process Destroy user
+routes['POST']['/users/destroy/<user_id'] = 'Users#destroy'
+# Process destroy job
+routes['POST']['/jobs/destroy/<job_id>']
 
-    Pylot will also automatically generate routes that resemble: '/controller/method/parameters'
-    For example if you had a products controller with an add method that took one parameter 
-    named id the automatically generated url would be '/products/add/<id>'
-    The automatically generated routes respond to all of the http verbs (GET, POST, PUT, PATCH, DELETE)
-"""
-routes['default_controller'] = 'Welcome'
-"""
-    You can add routes and specify their handlers as follows:
 
-    routes['VERB']['/URL/GOES/HERE'] = 'Controller#method'
-
-    Note the '#' symbol to specify the controller method to use.
-    Note the preceding slash in the url.
-    Note that the http verb must be specified in ALL CAPS.
-    
-    If the http verb is not provided pylot will assume that you want the 'GET' verb.
-
-    You can also use route parameters by using the angled brackets like so:
-    routes['PUT']['/users/<int:id>'] = 'users#update'
-
-    Note that the parameter can have a specified type (int, string, float, path). 
-    If the type is not specified it will default to string
-
-    Here is an example of the restful routes for users:
-
-    routes['GET']['/users'] = 'users#index'
-    routes['GET']['/users/new'] = 'users#new'
-    routes['POST']['/users'] = 'users#create'
-    routes['GET']['/users/<int:id>'] = 'users#show'
-    routes['GET']['/users/<int:id>/edit' = 'users#edit'
-    routes['PATCH']['/users/<int:id>'] = 'users#update'
-    routes['DELETE']['/users/<int:id>'] = 'users#destroy'
-"""
+# Show all bids on job_id.  Render
+# routes['/bids/<job_id>'] 'Bids#show'
+# routes['POST']['/bids/add/<job_id>'] = 'Bids#add'
+# routes['POST']['/bids/counter/<bid_id>'] = 'Bids#counter'
+# routes['POST']['/bids/accept/<bid_id>'] = 'Bids#accept'
