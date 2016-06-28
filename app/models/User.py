@@ -1,5 +1,6 @@
 from system.core.model import Model
 import re     # still need to import this module: we use regular expressions to validate email formats!
+
 class User(Model):
     def __init__(self):
         super(User, self).__init__()

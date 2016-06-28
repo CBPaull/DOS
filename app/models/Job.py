@@ -2,6 +2,7 @@ from system.core.model import Model
 
 JOB_STATUS = ['open', 'closed', 'completed', 'failed']
 
+
 class Job(Model):
 
     def __init__(self):
@@ -54,10 +55,10 @@ class Job(Model):
             'description': input_form['description'],
             'user_id': input_form['user_id'],
             'time': input_form['time'],
-            'status': JOB_STATUS[0],
+            'status': JOB_STATUS[0]
         }
         query = "INSERT INTO jobs(title, description, user_id, time, status, created_at, updated_at) " \
-                "VALUES (:title, :description, :user_id, :time, : status, NOW(), NOW())"
+                "VALUES (:title, :description, :user_id, :time, : status, NOW(), NOW());"
         job_id = self.db.query_db(query, data)
         data2 = {
             'apartment': input_form['apartment'],
@@ -76,6 +77,39 @@ class Job(Model):
         self.db.query_db(query3, data3)
         return {'status': True, 'job_id': job_id}
 
+    def update_job(self, input_form, job_id):
+        # ToDo - add skills
+        #
+        # Data structuring
+        data = {
+            'title': input_form['title'],
+            'description': input_form['description'],
+            'user_id': input_form['user_id'],
+            'time': input_form['time'],
+            'status': input_form['status'],
+            'job_id': job_id
+        }
+        query = "UPDATE jobs SET title=:title, description=:description, time=:time, updated_at=NOW() " \
+                "WHERE jobs.id = :job_id;"
+        self.db.query_db(query, data)
+        data2 = {
+            'job_id': job_id,
+        }
+        query2 = "SELECT address_id FROM jobs_has_addresses WHERE job_id=:job_id;"
+        address_id = self.db.query_db(query2, data2)
+        data3 = {
+            'apartment': input_form['apartment'],
+            'address1': input_form['address'],
+            'city': input_form['city'],
+            'zipcode': input_form['zipcode'],
+            'address_id': address_id
+        }
+        query3 = "UPDATE addresses SET apartment=:apartment, address=:address1, city=:city, zipcode=:zipcode) " \
+                 "WHERE address.id = :address_id;"
+        self.db.query_db(query3, data3)
+
+        return {'status': True, 'job_id': job_id}
+
     def job_change_status(self, job_id, job_stat):
         # Change job status ['open, 'closed', 'completed', 'failed']
         data = {
@@ -84,15 +118,15 @@ class Job(Model):
         }
         query = "UPDATE jobs SET status = :status WHERE id=:job_id;"
         self.db.query_db(query, data)
-        return
+        return job_id
 
 
-    def destroy_jobs(self, job_id):
+    def destroy_job(self, job_id):
         # Destory a job.  Delete from database.  *Uses cascade delete
         data = {
             'job_id': job_id
         }
-        query = "DELETE FROM jobs WHERE id=:job_id"
+        query = "DELETE FROM jobs WHERE id=:job_id;"
         self.db.query_db(query, data)
         return
 
