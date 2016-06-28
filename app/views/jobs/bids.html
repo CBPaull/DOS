@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+	<html lang="en">
+		<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css" type="text/css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+		<script type="text/javascript" src='/static/bootstrap/js/bootstrap.js'></script>
+		<link rel="stylesheet" href="/static/css/styles.css" type="text/css">
+		<link rel="stylesheet" href="/static/css/navbar-fixed-top.css" type="text/css">
+
+		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		
+		<script type="text/javascript">
+			$( document ).ready(function() {
+				$( "#tabs" ).tabs();
+				$(document).on('click','li',function(){
+					$(this).removeClass("active");
+					$(this).siblings().removeClass("active");
+					$(this).addClass("active");
+				});
+
+
+			});
+		</script>
+		
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">D.O.S.</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					
+					<ul class="nav navbar-nav navbar-right">
+						<li class="active"><a href="./">Home<span class="sr-only">(current)</span></a></li>
+						<li><a href="#">Vendors</a></li>
+						<li><a href="#">Contractors</a></li>
+						<li><a href="#">Search</a></li>
+						<li><a href="#">Profile</a></li>
+						<li><a href="#">Logout</a></li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+	    </nav>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8">
+					<div class="row">
+						<div class="col-md-10">
+							<Name> bid <amount>
+						</div>
+						<div class="col-md-2">
+							Countered<br>,Rejected,<br>Accepted<br>, empty
+						</div>
+					</div>
+					<div class="row">
+						Bid message, background color will change based on acceptance status
+					</div>
+					<div class="row">
+						<button>Acceptance</button>
+						<button>Counter</button>
+						<button>Reject</button>
+					</div>
+					<div class="row">
+						<p>counter</p>
+						<form>
+							<p>counter message?</p>
+							<button>Submit</button>
+						</form>
+					</div>
+				</div>
+				<div class="col-md-2">
+					Ratings will go here with link to profile page
+				</div>
+			</div>
+			
+			<div class="row">
+				{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+						{% for category, message in messages %}
+							{%if message != ''%}
+								<p>{{category}}: {{message}}</p>
+							{%endif%}
+						{% endfor %}
+					{% endif %}
+				{% endwith %}
+			</div>
+	    </div> <!-- /container -->
+
+	</body>
+</html>
