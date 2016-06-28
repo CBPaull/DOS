@@ -19,13 +19,13 @@ routes['/users/userlist'] 'Users#userlist'
 # Page for adding new job. Render.
 routes['/jobs/addnew'] = 'Jobs#addnew'
 # Show wall of jobs. Render
-routes['/jobs/joblist'] = 'Jobs#Joblist'
+routes['/jobs/joblist'] = 'Jobs#joblist'
 # Show job by job_id
-routes['/jobs/show/<job_id>'] = 'Jobs#view'
+routes['/jobs/show/<job_id>'] = 'Jobs#show'
 # Edit job by job_id
-routes['/jobs/edit/<job_id>'] = 'Jobs#view'
+routes['/jobs/edit/<job_id>'] = 'Jobs#edit'
 # Process create user.
-routes['POST']['/users/add']='Users#add'
+routes['POST']['/users/create']='Users#create'
 # Process Login user.
 routes['POST']['/users/login']='Users#login'
 # Process logout user.
