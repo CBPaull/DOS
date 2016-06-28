@@ -9,6 +9,9 @@ class Jobs(Controller):
         self.db = self._app.db
 
     def index(self):
-
+    	# Adding more stuff here.
         return self.load_view('index.html')
 
+    def show_all_job(self):
+    	all_jobs = self.model['Job'].get_all_jobs()
+    	return self.load_view('jobs.html', all_jobs=all_jobs)
