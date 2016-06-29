@@ -14,7 +14,8 @@ class Job(Model):
                 "users.lastname AS 'lastname', users.email AS 'email', users.phone AS 'phone', addresses.address1, " \
                 "addresses.apartment, addresses.city, addresses.zipcode  FROM jobs " \
                 "JOIN users ON jobs.user_id = users.id  JOIN jobs_has_addresses ON jobs.id = jobs_has_addresses.job_id" \
-                " JOIN addresses ON jobs_has_addresses.address_id = addresses.id; "
+                " JOIN addresses ON jobs_has_addresses.address_id = addresses.id " \
+                "ORDER BY jobs.created_at DESC; "
         all_jobs = self.db.query_db(query)
         return all_jobs
 
@@ -51,25 +52,31 @@ class Job(Model):
         # ToDo - add skills
         #
         # Data structuring
+        print input_form
+        event_datetime = "%s %s:00" % (str(input_form['time']), str(input_form['datetime']))
         data = {
             'title': input_form['title'],
             'description': input_form['description'],
             'user_id': input_form['user_id'],
-            'time': input_form['time'],
+            'time': event_datetime,
             'status': JOB_STATUS[0]
         }
+        print data
         query = "INSERT INTO jobs(title, description, user_id, time, status, created_at, updated_at) " \
                 "VALUES (:title, :description, :user_id, :time, :status, NOW(), NOW());"
         job_id = self.db.query_db(query, data)
+        print "job_id", job_id
         data2 = {
             'apartment': input_form['apartment'],
-            'address1': input_form['address'],
+            'address1': input_form['address1'],
             'city': input_form['city'],
+            'state': input_form['state'],
             'zipcode': input_form['zipcode']
         }
-        query2 = "INSERT INTO addresses(apartment, address, city, zipcode) " \
-                 "VALUES(:apartment, :address1, :city, :zipcode);"
+        query2 = "INSERT INTO addresses(apartment, address1, city, state, zipcode, created_at, updated_at) " \
+                 "VALUES(:apartment, :address1, :city, :state, :zipcode, NOW(), NOW());"
         address_id = self.db.query_db(query2, data2)
+        print "address_id", address_id
         data3 = {
             'job_id': job_id,
             'address_id': address_id
