@@ -177,13 +177,14 @@ DROP TABLE IF EXISTS `jobs_has_addresses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jobs_has_addresses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `job_id` int(11) NOT NULL,
   `address_id` int(11) NOT NULL,
-  PRIMARY KEY (`job_id`,`address_id`),
+  PRIMARY KEY (`id`,`job_id`,`address_id`),
   KEY `fk_Jobs_has_Addresses_Addresses1_idx` (`address_id`),
   KEY `fk_Jobs_has_Addresses_Jobs1_idx` (`job_id`),
-  CONSTRAINT `fk_Jobs_has_Addresses_Jobs1` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Jobs_has_Addresses_Addresses1` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_Jobs_has_Addresses_Addresses1` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Jobs_has_Addresses_Jobs1` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -257,13 +258,14 @@ DROP TABLE IF EXISTS `skills_has_contractors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `skills_has_contractors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `skill_id` int(11) NOT NULL,
   `contractor_id` int(11) NOT NULL,
-  PRIMARY KEY (`skill_id`,`contractor_id`),
+  PRIMARY KEY (`id`,`skill_id`,`contractor_id`),
   KEY `fk_skills_has_contractors_contractors1_idx` (`contractor_id`),
   KEY `fk_skills_has_contractors_skills1_idx` (`skill_id`),
-  CONSTRAINT `fk_skills_has_contractors_skills1` FOREIGN KEY (`skill_id`) REFERENCES `skills` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_skills_has_contractors_contractors1` FOREIGN KEY (`contractor_id`) REFERENCES `contractors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_skills_has_contractors_contractors1` FOREIGN KEY (`contractor_id`) REFERENCES `contractors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_skills_has_contractors_skills1` FOREIGN KEY (`skill_id`) REFERENCES `skills` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -284,13 +286,14 @@ DROP TABLE IF EXISTS `skills_has_jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `skills_has_jobs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `skill_id` int(11) NOT NULL,
   `job_id` int(11) NOT NULL,
-  PRIMARY KEY (`skill_id`,`job_id`),
+  PRIMARY KEY (`id`,`skill_id`,`job_id`),
   KEY `fk_Skills_has_Jobs_Jobs1_idx` (`job_id`),
   KEY `fk_Skills_has_Jobs_Skills1_idx` (`skill_id`),
-  CONSTRAINT `fk_Skills_has_Jobs_Skills1` FOREIGN KEY (`skill_id`) REFERENCES `skills` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Skills_has_Jobs_Jobs1` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_Skills_has_Jobs_Jobs1` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Skills_has_Jobs_Skills1` FOREIGN KEY (`skill_id`) REFERENCES `skills` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -311,13 +314,14 @@ DROP TABLE IF EXISTS `skills_has_services`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `skills_has_services` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `skill_id` int(11) NOT NULL,
   `service_id` int(11) NOT NULL,
-  PRIMARY KEY (`skill_id`,`service_id`),
+  PRIMARY KEY (`id`,`skill_id`,`service_id`),
   KEY `fk_Skills_has_services_services1_idx` (`service_id`),
   KEY `fk_Skills_has_services_Skills1_idx` (`skill_id`),
-  CONSTRAINT `fk_Skills_has_services_Skills1` FOREIGN KEY (`skill_id`) REFERENCES `skills` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Skills_has_services_services1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_Skills_has_services_services1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Skills_has_services_Skills1` FOREIGN KEY (`skill_id`) REFERENCES `skills` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -369,13 +373,14 @@ DROP TABLE IF EXISTS `users_has_addresses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users_has_addresses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `address_id` int(11) NOT NULL,
-  PRIMARY KEY (`user_id`,`address_id`),
+  PRIMARY KEY (`id`,`user_id`,`address_id`),
   KEY `fk_Users_has_Addresses_Addresses1_idx` (`address_id`),
   KEY `fk_Users_has_Addresses_Users_idx` (`user_id`),
-  CONSTRAINT `fk_Users_has_Addresses_Users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Users_has_Addresses_Addresses1` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_Users_has_Addresses_Addresses1` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Users_has_Addresses_Users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -460,4 +465,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-28 20:39:58
+-- Dump completed on 2016-06-28 20:45:19
