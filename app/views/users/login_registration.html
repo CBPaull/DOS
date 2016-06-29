@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-	<html lang="en">
-		<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css" type="text/css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-		<script type="text/javascript" src='/static/bootstrap/js/bootstrap.js'></script>
-		<link rel="stylesheet" href="/static/css/navbar-fixed-top.css" type="text/css">
-		<link rel="stylesheet" href="/static/css/styles.css" type="text/css">
-	</head>
-	<body>
+{% extends "layout.html" %}
+{% block content %}
 		<div class="container">
+			{% if not session['id'] %}
 			<div class="row">
 				<div class="col-md-6">
 					<form action="/users/create" method="post">
@@ -145,17 +139,8 @@
 					</form>
 				</div>
 			</div>
-			<div class="row">
-				{% with messages = get_flashed_messages(with_categories=true) %}
-					{% if messages %}
-						{% for category, message in messages %}
-							{%if message != ''%}
-								<p>{{category}}: {{message}}</p>
-							{%endif%}
-						{% endfor %}
-					{% endif %}
-				{% endwith %}
-			</div>
+			{% else %}
+			<h3 class="warning">You are already logged in!</h3>
+			{% endif %}
 	    </div> <!-- /container -->
-	</body>
-</html>
+{% endblock %}

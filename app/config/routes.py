@@ -3,7 +3,7 @@ from system.core.router import routes
 # Default Welcome Page.  Render
 routes['default_controller'] = 'Users'
 # Login Registration Page. Render
-routes['/users/logreg'] = 'Users#logreg'
+routes['/users/logreg'] = 'Users#index'
 # Show all users. Render
 routes['/users/showall'] =  'Users#showall'
 # Show User page. Render
@@ -16,8 +16,6 @@ routes['/users/vendor/<user_id>'] = 'Users#vendor'
 routes['/users/contractor/<user_id>'] = 'Users#contractor'
 # Show search page. Render
 routes['/search'] = 'Users#search'
-# List of all users. Render
-routes['/users/userlist'] = 'Users#userlist'
 # Page for adding new job. Render.
 routes['/jobs/addnew'] = 'Jobs#addnew'
 # Show wall of jobs. Render
@@ -40,6 +38,8 @@ routes['POST']['/users/update_address/<user_id>'] = 'Users#update_address'
 routes['POST']['/jobs/add'] = 'Jobs#add'
 # Process update job.
 routes['POST']['/jobs/update/<job_id>'] = 'Jobs#update'
+# Process update job address.
+routes['POST']['/jobs/update_address/<job_id>'] = 'Jobs#update_address'
 # Process job status. (Change job status)
 routes['POST']['/jobs/update_status/<job_id>'] = 'Jobs#confirm'
 # Process Destroy user

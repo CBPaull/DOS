@@ -6,7 +6,8 @@ class User(Model):
         super(User, self).__init__()
 
     def get_all_users(self):
-        query = "SELECT firstname, lastname, users.created_at AS created_at, users.updated_at AS updated_at, email, phone, servicename, user_level, " \
+        query = "SELECT users.id, firstname, lastname, users.created_at AS created_at, users.updated_at AS updated_at, " \
+                "email, phone, servicename, user_level, " \
                 "addresses.address1, addresses.apartment, addresses.city, addresses.zipcode " \
                 "FROM users " \
                 "JOIN users_has_addresses ON users.id = users_has_addresses.user_id " \
@@ -16,7 +17,8 @@ class User(Model):
 
     def show_user(self, user_id):
         info = { 'user_id': user_id }
-        query = "SELECT firstname, lastname, users.created_at AS created_at, users.updated_at AS updated_at, email, phone, servicename, user_level, " \
+        query = "SELECT users.id, firstname, lastname, users.created_at AS created_at, users.updated_at AS updated_at, " \
+                "email, phone, servicename, user_level, " \
                 "addresses.address1, addresses.apartment, addresses.city, addresses.zipcode " \
                 "FROM users " \
                 "JOIN users_has_addresses ON users.id = users_has_addresses.user_id " \

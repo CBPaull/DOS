@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+	<html lang="en">
+		<script src="/static/js/jquery-1.12.2.js"></script>
+		<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css" type="text/css">
+		<script type="text/javascript" src='/static/bootstrap/js/bootstrap.js'></script>
+		<link rel="stylesheet" href="/static/css/styles.css" type="text/css">
+		<link rel="stylesheet" href="/static/css/navbar-fixed-top.css" type="text/css">
+		<script src="/static/js/jquery-ui.js"></script>
+		<script type="text/javascript">
+			$( document ).ready(function() {
+				$( "#tabs" ).tabs();
+				$(document).on('click','li',function(){
+					$(this).removeClass("active");
+					$(this).siblings().removeClass("active");
+					$(this).addClass("active");
+				});
+			});
+		</script>
+	</head>
+<body>
+{% if session['id']: %}
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">D.O.S.</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					
+					<ul class="nav navbar-nav navbar-right">
+						<li class="active"><a href="/">Home<span class="sr-only">(current)</span></a></li>
+<!-- 						<li><a href="#">Vendors</a></li>
+						<li><a href="#">Contractors</a></li>
+						<li><a href="#">Search</a></li> -->
+						<li><a href="/users/showall">Users</a></li> 
+						<li><a href="/jobs/joblist">Jobs</a></li> 
+						<li><a href="/users/show/{{ session['id'] }}">Profile</a></li>
+						<li><form action="/users/logout" method="post"><button type="submit" class="btn btn-sm" id="logoutbtn">Log Out</button></form></li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+	    </nav>
+{% else %}
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">D.O.S.</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					
+					<ul class="nav navbar-nav navbar-right">
+						<li class="active"><a href="/">Home<span class="sr-only">(current)</span></a></li>
+						<li><a href="#">About</a></li>
+						<li><a href="#">Contact</a></li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+	    </nav>
+{% endif %}
+{% block content %}{% endblock %}
+	<div class="row">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					{%if message != ''%}
+						<p>{{category}}: {{message}}</p>
+					{%endif%}
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+	</div>
+</body>
+</html>

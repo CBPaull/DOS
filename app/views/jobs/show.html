@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2">
+				<h2><a href="/jobs/show/{{ job['job_id'] }}">{{ job['job_title']}}</a></h2>
+				<h3>{{ job['firstname']}} {{ job['lastname'] }}</h3>
+				ratings go here
+			</div>
+			<div class="col-md-5">
+				<p>Title: </p>
+				<p>Description: {{ job['job_description'] }}</p>
+				<p>phone: {{ job['phone'] }}</p>
+				<p>email: {{ job['email'] }}</p>
+				<p>posted by: <a href="/users/show/{{ job['user_id'] }}">{{ job['firstname']}} {{ job['lastname'] }}</a></p>
+				<p>posted at: {{ job['posted_at'] }}</p>
+				<p>scheduled for: {{ job['job_time'] }}</p>
+				<p>address: {{ job['address1']}} {{ job['apartment']}} {{ job['city']}} {{ job['zipcode']}}</p> 
+				<hr>
+			</div>
+			<div class="col-md-5" id="map">
+				<script>
+					function initMap() {
+						var myLatLng = {lat: 38.3, lng: -76.51};
+
+						var map = new google.maps.Map(document.getElementById('map'), {
+						zoom: 20,
+						center: myLatLng
+						});
+
+						var marker = new google.maps.Marker({
+						position: myLatLng,
+						map: map,
+						title: 'Maps'
+						});
+					}
+				</script>
+				<script async defer
+				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqgY1E9_hEZftP5UgRlloVEiFaoz9iUNc&callback=initMap">
+				</script>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2">
+				
+			</div>
+			<div class="col-md-10">
+				Current bids
+			</div>
+		</div>
+    </div> <!-- /container -->
+{% endblock %}
