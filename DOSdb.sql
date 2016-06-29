@@ -153,15 +153,15 @@ CREATE TABLE `jobs` (
   `title` varchar(45) DEFAULT NULL,
   `description` varchar(500) DEFAULT NULL,
   `price` varchar(45) DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
   `accepted_id` int(11) DEFAULT NULL,
   `time` datetime DEFAULT NULL,
   `status` varchar(45) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_Jobs_Vendors1_idx` (`user_id`),
-  CONSTRAINT `fk_Jobs_Vendors1` FOREIGN KEY (`user_id`) REFERENCES `vendors` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  KEY `user_id_idx` (`user_id`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -472,4 +472,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-28 22:44:39
+-- Dump completed on 2016-06-29  0:51:42
