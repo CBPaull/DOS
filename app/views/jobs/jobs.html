@@ -57,8 +57,26 @@
 				<div class="col-md-5">
 					Job details and bid?
 				</div>
-				<div class="col-md-5">
-					Put maps later
+				<div class="col-md-5" id="map">
+					<script>
+						function initMap() {
+							var myLatLng = {lat: 38.3, lng: -76.51};
+
+							var map = new google.maps.Map(document.getElementById('map'), {
+							zoom: 20,
+							center: myLatLng
+							});
+
+							var marker = new google.maps.Marker({
+							position: myLatLng,
+							map: map,
+							title: 'Maps'
+							});
+						}
+					</script>
+					<script async defer
+					src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqgY1E9_hEZftP5UgRlloVEiFaoz9iUNc&callback=initMap">
+					</script>
 				</div>
 			</div>
 			<div class="row">
