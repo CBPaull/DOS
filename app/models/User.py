@@ -62,7 +62,6 @@ class User(Model):
             'password': requestform['password'],
             'confirmation': requestform['confirmation'],
             'user_level': requestform['user_level']
-
         }
         EMAIL_REGEX = re.compile(r'^[a-za-z0-9\.\+_-]+@[a-za-z0-9\._-]+\.[a-za-z]*$')
         PASS_REGEX = re.compile(r'\d.*[A-Z]|[A-Z].*\d')
@@ -98,30 +97,27 @@ class User(Model):
             return {"status": False, "errors": errors}
         else:
             pw_hash = self.bcrypt.generate_password_hash(info['password'])
-            insert_query = "INSERT INTO users (firstname, lastname, email, phone, pw_hash, created_at, updated_at) VALUES (:firstname, :lastname, :email, :phone, :pw_hash, NOW(), NOW())"
-            data = { 'firstname': info['firstname'], 'lastname': info['lastname'], 'email': info['email'], 'phone': info['phone'], 'pw_hash': pw_hash }
-            print data
+            insert_query = "INSERT INTO users (firstname, lastname, email, phone, pw_hash, user_level, created_at, updated_at) VALUES (:firstname, :lastname, :email, :phone, :pw_hash, :user_level, NOW(), NOW())"
+            data = { 'firstname': info['firstname'], 'lastname': info['lastname'], 'email': info['email'], 'phone': info['phone'], 'pw_hash': pw_hash, 'user_level': info['user_level'] }
             self.db.query_db(insert_query, data)
             get_user_query = "SELECT * FROM users ORDER BY id DESC LIMIT 1"
             users = self.db.query_db(get_user_query)
-
-        address = {
-            'address1': requestform['address1'],
-            'city': requestform['city'],
-            'zipcode': requestform['zipcode'],
-            'apartment': requestform['apartment'],
-            'home': requestform['home']
-        }
-        # still need a check to ensure address is correct.
-        address_query = "INSERT INTO addresses (address1, city, zipcode, apartment, created_at, updated_at) VALUES (:address1, :city, :zipcode, :apartment, NOW(), NOW())"
-        address_data = {'address1': address['address1'], 'city': address['city'], 'zipcode': address['zipcode'], 'apartment': address['apartment'] }
-        self.db.query_db(address_query, address_data)
-        get_address_query = "SELECT * FROM addresses ORDER BY id DESC LIMIT 1"
-        user_address = self.db.query_db(get_address_query)
-        link_query = "INSERT INTO users_has_addresses (users_id, addresses_id) VALUES ( :users_id, :addresses_id)"
-        link_data = { 'Users_id': users[0]['id'], 'Addresses_id': user_address[0]['id']}
-        self.db.query_db(link_query, link_data)
-        return { "status": True, "user": users[0]}
+            address = {
+                'address1': requestform['address1'],
+                'city': requestform['city'],
+                'zipcode': requestform['zipcode'],
+                'apartment': requestform['apartment'],
+                'home': requestform['home']
+            }
+            address_query = "INSERT INTO addresses (address1, city, zipcode, apartment, created_at, updated_at) VALUES (:address1, :city, :zipcode, :apartment, NOW(), NOW())"
+            address_data = { 'address1': address['address1'], 'city': address['city'], 'zipcode': address['zipcode'], 'apartment': address['apartment'] }
+            self.db.query_db(address_query, address_data)
+            get_address_query = "SELECT * FROM addresses ORDER BY id DESC LIMIT 1"
+            user_address = self.db.query_db(get_address_query)
+            link_query = "INSERT INTO users_has_addresses (users_id, addresses_id) VALUES ( :users_id, :addresses_id)"
+            link_data = { 'users_id': users[0]['id'], 'addresses_id': user_address[0]['id']}
+            self.db.query_db(link_query, link_data)
+            return { "status": True, "user": users[0]}
 
     def update_user(self, requestform):
         info = {

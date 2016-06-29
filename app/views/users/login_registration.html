@@ -19,7 +19,7 @@
 										<label>First name:</label>
 									</td>
 									<td>
-										<input type="text" name="first_name" placeholder="First name"><br>
+										<input type="text" name="firstname" placeholder="First name"><br>
 									</td>
 								</tr>
 								<tr>
@@ -27,7 +27,7 @@
 										<label>Last name:</label>
 									</td>
 									<td>
-										<input type="text" name="last_name" placeholder="Last name"><br>
+										<input type="text" name="lastname" placeholder="Last name"><br>
 									</td>
 								</tr>
 								<tr>
@@ -52,7 +52,7 @@
 										<label>Confirm PW:</label>
 									</td>
 									<td>
-										<input type="password" name="confirm_password">
+										<input type="password" name="confirmation">
 									</td>
 								</tr>
 								<tr>
@@ -60,7 +60,7 @@
 										<label>Phone number</label>
 									</td>
 									<td>
-										<input type="number" name="phone_number" placeholder="Phone number" required>
+										<input type="number" name="phone" placeholder="Phone number" required>
 									</td>
 								</tr>
 								<tr>
@@ -68,7 +68,7 @@
 										<label>Street:</label>
 									</td>
 									<td>
-										<input type="text" name="street" placeholder="street"><br>
+										<input type="text" name="address1" placeholder="street"><br>
 									</td>
 								</tr>
 								<tr>
@@ -76,7 +76,7 @@
 										<label>Aptartment #:</label>
 									</td>
 									<td>
-										<input type="text" name="apartment_number" placeholder="Apartment #"><br>
+										<input type="text" name="apartment" placeholder="Apartment #"><br>
 									</td>
 								</tr>
 								<tr>
@@ -92,11 +92,13 @@
 										<label>Zip code:</label>
 									</td>
 									<td>
-										<input type="number" name="zip_code" placeholder="Zipcode"><br>
+										<input type="number" name="zipcode" placeholder="Zipcode"><br>
 									</td>
 								</tr>
 								<tr>
 									<td>
+										<input type='hidden' name="user_level" value="0">
+										<input type="hidden" name="home" value="1">
 									</td>
 									<td class="alignRight">
 										<button type="submit" name="Sign In" class="btn btn-success">Register</button>
