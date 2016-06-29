@@ -3,7 +3,7 @@ from system.core.router import routes
 # Default Welcome Page.  Render
 routes['default_controller'] = 'Users'
 # Login Registration Page. Render
-routes['/users/logreg'] = 'Users#logreg'
+routes['/users/logreg'] = 'Users#index'
 # Show all users. Render
 routes['/users/showall'] =  'Users#showall'
 # Show User page. Render
@@ -16,8 +16,6 @@ routes['/users/vendor/<user_id>'] = 'Users#vendor'
 routes['/users/contractor/<user_id>'] = 'Users#contractor'
 # Show search page. Render
 routes['/search'] = 'Users#search'
-# List of all users. Render
-routes['/users/userlist'] = 'Users#userlist'
 # Page for adding new job. Render.
 routes['/jobs/addnew'] = 'Jobs#addnew'
 # Show wall of jobs. Render
@@ -40,21 +38,19 @@ routes['POST']['/users/update_address/<user_id>'] = 'Users#update_address'
 routes['POST']['/jobs/add'] = 'Jobs#add'
 # Process update job.
 routes['POST']['/jobs/update/<job_id>'] = 'Jobs#update'
+# Process update job address.
+routes['POST']['/jobs/update_address/<job_id>'] = 'Jobs#update_address'
 # Process job status. (Change job status)
 routes['POST']['/jobs/update_status/<job_id>'] = 'Jobs#confirm'
 # Process Destroy user
 routes['POST']['/users/destroy/<user_id>'] = 'Users#destroy'
-# process Destroy address
+#Process Destroy address
 routes['POST']['/users/destroyaddress/<address_id>'] = 'Users#destroyaddress'
 # Process destroy job
 routes['POST']['/jobs/destroy/<job_id>'] = 'Jobs#destroy'
 
-
-# Process a vendor review
-# Process a contractor review
-
-
-
+# add routes to create, edit, view, and destroy vendor reviews
+# add routes to create, edit, view, and destroy contractor reviews
 # Show all bids on job_id.  Render
 # routes['/bids/<job_id>'] 'Bids#show'
 # routes['POST']['/bids/add/<job_id>'] = 'Bids#add'

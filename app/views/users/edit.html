@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<!--To be added, page showing all users.  -->
+<h2>Editing user: {{ user['firstname']}} {{ user['lastname'] }}</h2>
+		<form action="/users/update/{{ user['id'] }}" method="post">
+			<div class="input-group">
+				first name:
+				<input type="text" name="firstname" value="{{ user['firstname']}}">
+				last name:
+				<input type="text" name="lastname" value="{{ user['lastname'] }}"><br>
+				Phone
+				<input type="phone" name="phone" value="{{ user['phone'] }}"><br>
+				email
+				<input type="email" name="email" value="{{ user['email'] }}"><br>
+				<button class="btn" type="submit">Submit</button>
+			</div>
+		</form>
+		<br>
+		<form action="/users/update_address/{{ user['id'] }}" method="post">
+			address:
+			<input type="text" name="address1" value="{{ user['address1']}}"><br>
+			Apartment:
+			<input type="text" name="apartment" value="{{ user['apartment']}}"><br>
+			City:
+			<input type="text" name="city" value="{{ user['city']}}"><br>
+			State:
+			<input type="text" name="state" placeholder="State"><br>
+			Zipcode:
+			<input type="text" name="zipcode" value="{{ user['zipcode']}}"><br>
+			<button class="btn" type="submit">Submit</button>
+		</form>
+{% endblock %}

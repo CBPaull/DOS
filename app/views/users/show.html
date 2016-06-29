@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block content %}
+<!--To be added, show individual users-->
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					<div class="row">
+						<img src="/static/img/default_pic.png" class="img-circle profile_pic_img" alt="user profile pic">
+					</div>
+					<div class="row">
+						{{ user['firstname']}} {{ user['lastname'] }}
+					</div>
+					<div class="row">
+							phone: {{ user['phone'] }}
+							
+					</div>
+					<div class="row">
+						{{ user['email'] }}
+					</div>
+					<div class="row">
+						member since: {{ user['created_at'] }}
+					</div>
+					<div class="row">
+						address: {{ user['address1']}} {{ user['apartment']}} {{ user['city']}} {{ user['zipcode']}}
+					</div>
+					<div class="row">
+						{% if session['id'] == user['id']: %}
+							<a href="/users/edit/{{ user['id'] }}">
+								<button class="btn btn-sm">Edit Profile</button>
+							</a>
+						{% endif %}
+					</div>
+				</div>
+				<div class="col-md-6">
+				Current Jobs. (Vendor pages will show posted jobs)
+				Contractor pages will show their standing job offers
+				</div>
+			</div>
+			<br>
+			<div class="row">
+
+			</div>
+	    </div> <!-- /container -->
+{% endblock %}

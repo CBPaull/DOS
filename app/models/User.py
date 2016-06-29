@@ -6,13 +6,24 @@ class User(Model):
         super(User, self).__init__()
 
     def get_all_users(self):
-        query = "SELECT * FROM users"
+        query = "SELECT users.id, firstname, lastname, users.created_at AS created_at, users.updated_at AS updated_at, " \
+                "email, phone, servicename, user_level, " \
+                "addresses.address1, addresses.apartment, addresses.city, addresses.zipcode " \
+                "FROM users " \
+                "JOIN users_has_addresses ON users.id = users_has_addresses.user_id " \
+                "JOIN addresses ON users_has_addresses.address_id = addresses.id;"
         users = self.db.query_db(query)
         return users
 
     def show_user(self, user_id):
         info = { 'user_id': user_id }
-        query = "SELECT * FROM users WHERE id = :user_id"
+        query = "SELECT users.id, firstname, lastname, users.created_at AS created_at, users.updated_at AS updated_at, " \
+                "email, phone, servicename, user_level, " \
+                "addresses.address1, addresses.apartment, addresses.city, addresses.zipcode " \
+                "FROM users " \
+                "JOIN users_has_addresses ON users.id = users_has_addresses.user_id " \
+                "JOIN addresses ON users_has_addresses.address_id = addresses.id " \
+                "WHERE users.id = :user_id;"
         user = self.db.query_db(query, info)
         return user
 
@@ -24,14 +35,14 @@ class User(Model):
 
     def show_addresses(self, user_id):
         info = { 'user_id': user_id }
-        query = "SELECT address1, city, zipcode, appartment, home FROM users LEFT JOIN users_has_addresses ON users.id = users_has_addresses.users_id LEFT JOIN addresses ON users_has_addresses.addresses_id = addresses.id WHERE users.id = :user_id"
+        query = "SELECT address1, city, zipcode, apartment, home FROM users LEFT JOIN users_has_addresses ON users.id = users_has_addresses.users_id LEFT JOIN addresses ON users_has_addresses.addresses_id = addresses.id WHERE users.id = :user_id"
         addresses = self.db.query_db(query, info)
         return addresses
 
 
     def show_address(self, address_id):
         info = { 'address_id': address_id }
-        query = "SELECT * FROM users WHERE id = :address_id"
+        query = "SELECT * FROM address WHERE id = :address_id"
         address = self.db.query_db(query, info)
         return address
 
@@ -49,9 +60,13 @@ class User(Model):
            # check_password_hash() compares encrypted password in DB to one provided by user logging in
             if self.bcrypt.check_password_hash(user[0]['pw_hash'], info['password']):
                 return { "status": True, "user": user[0]}
+            else:
+                errors.append('Incorrect password')
+                return {"status": False, "errors": errors}
+
         else:
-            errors.append('Incorrect Email or Password')
-            return {"status": False, "errors": errors}
+            errors.append('Incorrect Email')
+            return { "status": False, "errors": errors}
 
     def add_user(self, requestform):
         info = {
@@ -62,7 +77,6 @@ class User(Model):
             'password': requestform['password'],
             'confirmation': requestform['confirmation'],
             'user_level': requestform['user_level']
-
         }
         EMAIL_REGEX = re.compile(r'^[a-za-z0-9\.\+_-]+@[a-za-z0-9\._-]+\.[a-za-z]*$')
         PASS_REGEX = re.compile(r'\d.*[A-Z]|[A-Z].*\d')
@@ -98,30 +112,37 @@ class User(Model):
             return {"status": False, "errors": errors}
         else:
             pw_hash = self.bcrypt.generate_password_hash(info['password'])
-            insert_query = "INSERT INTO users (firstname, lastname, email, phone, pw_hash, created_at, updated_at) VALUES (:firstname, :lastname, :email, :phone, :pw_hash, NOW(), NOW())"
-            data = { 'firstname': info['firstname'], 'lastname': info['lastname'], 'email': info['email'], 'phone': info['phone'], 'pw_hash': pw_hash }
-            print data
+            insert_query = "INSERT INTO users (firstname, lastname, email, phone, pw_hash, user_level, created_at, updated_at) " \
+                           "VALUES (:firstname, :lastname, :email, :phone, :pw_hash, :user_level, NOW(), NOW())"
+            data = { 'firstname': info['firstname'], 'lastname': info['lastname'], 'email': info['email'], 'phone': info['phone'], 'pw_hash': pw_hash, 'user_level': info['user_level'] }
             self.db.query_db(insert_query, data)
             get_user_query = "SELECT * FROM users ORDER BY id DESC LIMIT 1"
             users = self.db.query_db(get_user_query)
-
-        address = {
-            'address1': requestform['address1'],
-            'city': requestform['city'],
-            'zipcode': requestform['zipcode'],
-            'apartment': requestform['apartment'],
-            'home': requestform['home']
-        }
-        # still need a check to ensure address is correct.
-        address_query = "INSERT INTO addresses (address1, city, zipcode, apartment, created_at, updated_at) VALUES (:address1, :city, :zipcode, :apartment, NOW(), NOW())"
-        address_data = {'address1': address['address1'], 'city': address['city'], 'zipcode': address['zipcode'], 'apartment': address['apartment'] }
-        self.db.query_db(address_query, address_data)
-        get_address_query = "SELECT * FROM addresses ORDER BY id DESC LIMIT 1"
-        user_address = self.db.query_db(get_address_query)
-        link_query = "INSERT INTO users_has_addresses (users_id, addresses_id) VALUES ( :users_id, :addresses_id)"
-        link_data = { 'Users_id': users[0]['id'], 'Addresses_id': user_address[0]['id']}
-        self.db.query_db(link_query, link_data)
-        return { "status": True, "user": users[0]}
+            address = {
+                'address1': requestform['address1'],
+                'city': requestform['city'],
+                'zipcode': requestform['zipcode'],
+                'apartment': requestform['apartment'],
+                'home': requestform['home']
+            }
+            address_query = "INSERT INTO addresses (address1, city, zipcode, apartment) " \
+                            "VALUES (:address1, :city, :zipcode, :apartment)"
+            address_data = {
+                'address1': address['address1'],
+                'city': address['city'],
+                'zipcode': address['zipcode'],
+                'apartment': address['apartment']
+            }
+            self.db.query_db(address_query, address_data)
+            get_address_query = "SELECT * FROM addresses ORDER BY id DESC LIMIT 1"
+            user_address = self.db.query_db(get_address_query)
+            link_query = "INSERT INTO users_has_addresses (user_id, address_id) VALUES ( :user_id, :address_id)"
+            link_data = {
+                'user_id': users[0]['id'],
+                'address_id': user_address[0]['id']
+            }
+            self.db.query_db(link_query, link_data)
+            return { "status": True, "user": users[0]}
 
     def update_user(self, requestform):
         info = {
@@ -189,8 +210,8 @@ class User(Model):
         self.db.query_db(address_query, address_data)
         get_address_query = "SELECT * FROM addresses ORDER BY id DESC LIMIT 1"
         user_address = self.db.query_db(get_address_query)
-        link_query = "INSERT INTO users_has_addresses (users_id, addresses_id) VALUES ( :users_id, LAST_INSERT_ID(id))"
-        link_data = {'users_id': user_id, 'addresses_id': user_address[0]['id']}
+        link_query = "INSERT INTO users_has_addresses (user_id, address_id) VALUES ( :user_id, LAST_INSERT_ID(id))"
+        link_data = {'user_id': user_id, 'address_id': user_address[0]['id']}
         self.db.query_db(link_query, link_data)
         return {"status": True, "user_id": user_id}
 

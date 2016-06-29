@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-	<html lang="en">
-		<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css" type="text/css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-		<script type="text/javascript" src='/static/bootstrap/js/bootstrap.js'></script>
-		<link rel="stylesheet" href="/static/css/navbar-fixed-top.css" type="text/css">
-		<link rel="stylesheet" href="/static/css/styles.css" type="text/css">
-	</head>
-	<body>
+{% extends "layout.html" %}
+{% block content %}
 		<div class="container">
+			{% if not session['id'] %}
 			<div class="row">
 				<div class="col-md-6">
-					<form action="/register" method="post">
+					<form action="/users/create" method="post">
 						<fieldset class="well the-fieldset">
 					        <legend class="the-legend">Register</legend>
 							<table>
@@ -19,7 +13,7 @@
 										<label>First name:</label>
 									</td>
 									<td>
-										<input type="text" name="first_name" placeholder="First name"><br>
+										<input type="text" name="firstname" placeholder="First name"><br>
 									</td>
 								</tr>
 								<tr>
@@ -27,7 +21,7 @@
 										<label>Last name:</label>
 									</td>
 									<td>
-										<input type="text" name="last_name" placeholder="Last name"><br>
+										<input type="text" name="lastname" placeholder="Last name"><br>
 									</td>
 								</tr>
 								<tr>
@@ -52,7 +46,7 @@
 										<label>Confirm PW:</label>
 									</td>
 									<td>
-										<input type="password" name="confirm_password">
+										<input type="password" name="confirmation">
 									</td>
 								</tr>
 								<tr>
@@ -60,7 +54,7 @@
 										<label>Phone number</label>
 									</td>
 									<td>
-										<input type="number" name="phone_number" placeholder="Phone number" required>
+										<input type="number" name="phone" placeholder="Phone number" required>
 									</td>
 								</tr>
 								<tr>
@@ -68,7 +62,7 @@
 										<label>Street:</label>
 									</td>
 									<td>
-										<input type="text" name="street" placeholder="street"><br>
+										<input type="text" name="address1" placeholder="street"><br>
 									</td>
 								</tr>
 								<tr>
@@ -76,7 +70,7 @@
 										<label>Aptartment #:</label>
 									</td>
 									<td>
-										<input type="text" name="apartment_number" placeholder="Apartment #"><br>
+										<input type="text" name="apartment" placeholder="Apartment #"><br>
 									</td>
 								</tr>
 								<tr>
@@ -92,11 +86,13 @@
 										<label>Zip code:</label>
 									</td>
 									<td>
-										<input type="number" name="zip_code" placeholder="Zipcode"><br>
+										<input type="number" name="zipcode" placeholder="Zipcode"><br>
 									</td>
 								</tr>
 								<tr>
 									<td>
+										<input type='hidden' name="user_level" value="0">
+										<input type="hidden" name="home" value="1">
 									</td>
 									<td class="alignRight">
 										<button type="submit" name="Sign In" class="btn btn-success">Register</button>
@@ -110,7 +106,7 @@
 				</div>
 				
 				<div class="col-md-6">
-					<form action="/login" method="post">
+					<form action="/users/login" method="post">
 						<fieldset class="well the-fieldset">
 					        <legend class="the-legend">Login</legend>
 							<table>
@@ -143,17 +139,8 @@
 					</form>
 				</div>
 			</div>
-			<div class="row">
-				{% with messages = get_flashed_messages(with_categories=true) %}
-					{% if messages %}
-						{% for category, message in messages %}
-							{%if message != ''%}
-								<p>{{category}}: {{message}}</p>
-							{%endif%}
-						{% endfor %}
-					{% endif %}
-				{% endwith %}
-			</div>
+			{% else %}
+			<h3 class="warning">You are already logged in!</h3>
+			{% endif %}
 	    </div> <!-- /container -->
-	</body>
-</html>
+{% endblock %}
