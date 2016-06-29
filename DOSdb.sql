@@ -27,11 +27,13 @@ CREATE TABLE `addresses` (
   `address1` varchar(45) DEFAULT NULL,
   `city` varchar(45) DEFAULT NULL,
   `zipcode` int(11) DEFAULT NULL,
+  `state` varchar(25) DEFAULT NULL,
   `apartment` varchar(45) DEFAULT NULL,
+  `home` int(1) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +42,7 @@ CREATE TABLE `addresses` (
 
 LOCK TABLES `addresses` WRITE;
 /*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
+INSERT INTO `addresses` VALUES (14,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,'2016-06-28 20:49:15','2016-06-28 20:49:15'),(15,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,NULL,NULL),(16,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,NULL,NULL),(17,'123 Test St.','San Francisco',95054,NULL,'N/A',NULL,NULL,NULL),(18,'123 Test St.','San Francisco',95054,NULL,'N/A',NULL,NULL,NULL),(19,'4726 Armour Drive','Santa Clara',95054,'CA','N/A',1,'2016-06-28 22:42:49','2016-06-28 22:42:49');
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -150,13 +153,15 @@ CREATE TABLE `jobs` (
   `title` varchar(45) DEFAULT NULL,
   `description` varchar(500) DEFAULT NULL,
   `price` varchar(45) DEFAULT NULL,
-  `vendors_id` int(11) NOT NULL,
+  `accepted_id` int(11) DEFAULT NULL,
   `time` datetime DEFAULT NULL,
+  `status` varchar(45) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_Jobs_Vendors1_idx` (`vendors_id`),
-  CONSTRAINT `fk_Jobs_Vendors1` FOREIGN KEY (`vendors_id`) REFERENCES `vendors` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  KEY `user_id_idx` (`user_id`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -353,7 +358,7 @@ CREATE TABLE `users` (
   `phone` varchar(45) DEFAULT NULL,
   `user_level` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,6 +367,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (21,'Connor','Paull','email@email.com','$2b$12$dDEq3mTLHR3uuqBj1t5bZ.OMWd4QozFtN2IqLUL5I8Bn0wraNRED2',NULL,'2016-06-28 20:49:15','2016-06-28 20:49:15','9999999999','0'),(22,'User','Two','email@email.com','$2b$12$dghk9FlDKvSytcz7zOZchef1OAQL1INMb/F8VUdCxl5cMPf5PNd9y',NULL,'2016-06-28 21:01:01','2016-06-28 21:01:01','9999999999','0'),(23,'Connor','Paull','email@email.com','$2b$12$Ix6sYO0DkOfFnmAPHQ/08O0GSJNi.evBiPBQcAPm5tcZYF/ujM652',NULL,'2016-06-28 21:04:00','2016-06-28 21:04:00','9999999999','0'),(24,'Connor','Paull','cbpaull@gmail.com','$2b$12$J37t9CnXVBN4ju5Fb8utSuwjGD.Ha3ueivyUDSjyPb4B4pltJpX2O',NULL,'2016-06-28 21:21:38','2016-06-28 21:21:38','9999999999','0'),(25,'Ceebee','Paull','testbug@gmail.com','$2b$12$GA2ebyXyY.PmjM/8r4V.eurxS7Fao1.2njanvl.Dy2uXvLigN4Jha',NULL,'2016-06-28 22:28:34','2016-06-28 22:28:34','9999999999','0'),(26,'User','Bob','testbug@gmail.com','$2b$12$y.TcxPWy19diaqQQhQIVzuGzM9NA.0yLU.e/rj1jOdPzNxOVv9J4.',NULL,'2016-06-28 22:41:07','2016-06-28 22:41:07','9999999999','0'),(27,'User','Bob','testbug@gmail.com','$2b$12$1siN4seMTVwxH4TKo8Mwuuh1UojJctLR8II7XauB8Uh2EJfmviKKm',NULL,'2016-06-28 22:42:49','2016-06-28 22:42:49','9999999999','0');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -381,7 +387,7 @@ CREATE TABLE `users_has_addresses` (
   KEY `fk_Users_has_Addresses_Users_idx` (`user_id`),
   CONSTRAINT `fk_Users_has_Addresses_Addresses1` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Users_has_Addresses_Users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -390,6 +396,7 @@ CREATE TABLE `users_has_addresses` (
 
 LOCK TABLES `users_has_addresses` WRITE;
 /*!40000 ALTER TABLE `users_has_addresses` DISABLE KEYS */;
+INSERT INTO `users_has_addresses` VALUES (1,22,15),(2,23,16),(3,24,17),(4,25,18),(5,27,19);
 /*!40000 ALTER TABLE `users_has_addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -465,4 +472,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-28 20:45:19
+-- Dump completed on 2016-06-29  0:51:42
