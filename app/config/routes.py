@@ -44,10 +44,15 @@ routes['POST']['/jobs/update/<job_id>'] = 'Jobs#update'
 routes['POST']['/jobs/update_status/<job_id>'] = 'Jobs#confirm'
 # Process Destroy user
 routes['POST']['/users/destroy/<user_id>'] = 'Users#destroy'
+# process Destroy address
 routes['POST']['/users/destroyaddress/<address_id>'] = 'Users#destroyaddress'
-
 # Process destroy job
 routes['POST']['/jobs/destroy/<job_id>'] = 'Jobs#destroy'
+
+
+# Process a vendor review
+# Process a contractor review
+
 
 
 # Show all bids on job_id.  Render
