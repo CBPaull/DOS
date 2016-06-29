@@ -7,7 +7,7 @@ class User(Model):
 
     def get_all_users(self):
         query = "SELECT firstname, lastname, users.created_at AS created_at, users.updated_at AS updated_at, email, phone, servicename, user_level, " \
-                "addresses.address1, addresses.apartment, addresses.city, addresses.zipcode " \
+                "addresses.address1, addresses.apartment, addresses.city, addresses.zipcode, addresses.state " \
                 "FROM users " \
                 "JOIN users_has_addresses ON users.id = users_has_addresses.user_id " \
                 "JOIN addresses ON users_has_addresses.address_id = addresses.id;"
@@ -17,7 +17,7 @@ class User(Model):
     def show_user(self, user_id):
         info = { 'user_id': user_id }
         query = "SELECT firstname, lastname, users.created_at AS created_at, users.updated_at AS updated_at, email, phone, servicename, user_level, " \
-                "addresses.address1, addresses.apartment, addresses.city, addresses.zipcode " \
+                "addresses.address1, addresses.apartment, addresses.city, addresses.zipcode, addresses.state " \
                 "FROM users " \
                 "JOIN users_has_addresses ON users.id = users_has_addresses.user_id " \
                 "JOIN addresses ON users_has_addresses.address_id = addresses.id " \
@@ -33,7 +33,7 @@ class User(Model):
 
     def show_addresses(self, user_id):
         info = { 'user_id': user_id }
-        query = "SELECT address1, city, zipcode, apartment, home FROM users LEFT JOIN users_has_addresses ON users.id = users_has_addresses.users_id LEFT JOIN addresses ON users_has_addresses.addresses_id = addresses.id WHERE users.id = :user_id"
+        query = "SELECT address1, city, zipcode, apartment, state, home FROM users LEFT JOIN users_has_addresses ON users.id = users_has_addresses.users_id LEFT JOIN addresses ON users_has_addresses.addresses_id = addresses.id WHERE users.id = :user_id"
         addresses = self.db.query_db(query, info)
         return addresses
 
@@ -121,15 +121,18 @@ class User(Model):
                 'city': requestform['city'],
                 'zipcode': requestform['zipcode'],
                 'apartment': requestform['apartment'],
-                'home': requestform['home']
+                'home': requestform['home'],
+                'state': requestform['state']
             }
-            address_query = "INSERT INTO addresses (address1, city, zipcode, apartment) " \
-                            "VALUES (:address1, :city, :zipcode, :apartment)"
+            address_query = "INSERT INTO addresses (address1, city, zipcode, apartment, state, home, created_at, updated_at) " \
+                            "VALUES (:address1, :city, :zipcode, :apartment, :state, :home, NOW(), NOW())"
             address_data = {
                 'address1': address['address1'],
                 'city': address['city'],
                 'zipcode': address['zipcode'],
-                'apartment': address['apartment']
+                'apartment': address['apartment'],
+                'state': address['state'],
+                'home': address['home']
             }
             self.db.query_db(address_query, address_data)
             get_address_query = "SELECT * FROM addresses ORDER BY id DESC LIMIT 1"
@@ -201,10 +204,11 @@ class User(Model):
             'city': requestform['city'],
             'zipcode': requestform['zipcode'],
             'apartment': requestform['apartment'],
+            'state': requestform['state'],
             'home': requestform['home']
         }
-        address_query = "INSERT INTO addresses (address1, city, zipcode, apartment, created_at, updated_at) VALUES (:address1, :city, :zipcode, :apartment, NOW(), NOW()) ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)"
-        address_data = {'address1': address['address1'], 'city': address['city'], 'zipcode': address['zipcode'], 'apartment': address['apartment'] }
+        address_query = "INSERT INTO addresses (address1, city, zipcode, apartment, state, home, updated_at) VALUES (:address1, :city, :zipcode, :apartment, :state, :home, NOW()) ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)"
+        address_data = {'address1': address['address1'], 'city': address['city'], 'zipcode': address['zipcode'], 'apartment': address['apartment'], 'state': address['state'], 'home': address['home'] }
         self.db.query_db(address_query, address_data)
         get_address_query = "SELECT * FROM addresses ORDER BY id DESC LIMIT 1"
         user_address = self.db.query_db(get_address_query)
