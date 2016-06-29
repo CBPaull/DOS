@@ -51,6 +51,7 @@ class Users(Controller):
     def create(self):
         requestform = request.form
         user = self.models['User'].add_user(requestform)
+        print user
         session['id'] = user['id']
         return redirect('/users/show_employer_dashboard')
 
