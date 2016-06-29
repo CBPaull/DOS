@@ -1,4 +1,5 @@
 from system.core.model import Model
+import urllib, json
 
 JOB_STATUS = ['open', 'closed', 'completed', 'failed']
 
@@ -142,3 +143,10 @@ class Job(Model):
         self.db.query_db(query, data)
         return
 
+    def job_location_latitude_longtitude(self,address):
+        url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyBqgY1E9_hEZftP5UgRlloVEiFaoz9iUNc"
+        response = urllib.urlopen(url)
+        data = json.loads(response.read())
+        latitude = data['results'][0]['geometry']['location']['lat']
+        longitude = data['results'][0]['geometry']['location']['lng']
+        return {'latitude':latitude, 'longitude':longitude}
