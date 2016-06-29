@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<!--To be added, page showing all users.  -->
+<h2>Creating a new Job:</h2>
+		<form action="/jobs/add" method="post">
+			<div class="input-group">
+				<input type="hidden" name="user_id" value="{{ session['id'] }}">
+				Job Title:
+				<input type="text" name="title" placeholder="Title"><br>
+				Description:<br>
+				<textarea name="description" id="" placeholder="description"></textarea><br>
+				Job Schedule Date
+				<input type="date" name="time" placeholder="Date"><br>
+				Job Schedule Time
+				<input type="time" name="datetime" placeholder="Time"><br>
+				address:
+				<input type="text" name="address1" placeholder="address"><br>
+				Apartment:
+				<input type="text" name="apartment" placeholder="Apartment Number"><br>
+				City:
+				<input type="text" name="city" placeholder="City"><br>
+				State:
+				<input type="text" name="state" placeholder="State"><br>
+				Zipcode:
+				<input type="text" name="zipcode" placeholder="Zipcode"><br>
+				<button class="btn" type="submit">Submit</button>
+			</div>
+		</form>
+{% endblock %}

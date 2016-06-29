@@ -10,13 +10,10 @@ class Users(Controller):
     def index(self):
         return self.load_view('/users/login_registration.html')
 
-    def logreg(self):
-        return self.load_view('/users/login_registration.html')
-
     def showall(self):
         all_users = self.models['User'].get_all_users()
         # print all_users
-        return self.load_view('users/allusers.html', all_users=all_users)
+        return self.load_view('users/showall.html', all_users=all_users)
 
     # user list
     def vendor(self, u_id):
@@ -29,7 +26,7 @@ class Users(Controller):
     def contractor(self, u_id):
         # This will differentiate from vendor dashboard when we add contractors
         user = self.models['User'].show_user(u_id)
-        address = self.models['User'].show_addresses
+        address = self.models['User'].show_addressesf
         jobs = self.models['Job'].get_jobs_by_userid(u_id)
         return self.load_view('/users/dashboard_employer.html', user=user, address=address, jobs=jobs)
 
@@ -38,10 +35,9 @@ class Users(Controller):
         print user
         return self.load_view('/users/show.html', user=user[0])
 
-    def edit(self):
-        u_id = session['id']
-        user = self.models['User'].show_user(u_id)
-        return self.load_view('users/edit.html', user= user)
+    def edit(self, user_id):
+        user = self.models['User'].show_user(user_id)
+        return self.load_view('users/edit.html', user= user[0])
 
     def login(self):
         requestform = request.form
@@ -54,6 +50,9 @@ class Users(Controller):
                 flash(error)
             return redirect('/')
 
+    def logout(self):
+        session.clear()
+        return redirect('/')
 
     def create(self):
         requestform = request.form

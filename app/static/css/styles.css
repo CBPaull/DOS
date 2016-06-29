@@ -30,3 +30,12 @@
     height: 300px;
     width: 40%;
 }
+
+#logoutbtn {
+    margin-top: 10px;
+}
+
+.profile_pic_img {
+    width: 9em;
+    height: auto;
+}
