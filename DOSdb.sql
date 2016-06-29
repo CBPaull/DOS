@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `dosdb` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `DOSdb`;
 -- MySQL dump 10.13  Distrib 5.7.9, for osx10.9 (x86_64)
 --
 -- Host: 127.0.0.1    Database: DOSdb
@@ -37,16 +39,6 @@ CREATE TABLE `addresses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `addresses`
---
-
-LOCK TABLES `addresses` WRITE;
-/*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
-INSERT INTO `addresses` VALUES (14,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,'2016-06-28 20:49:15','2016-06-28 20:49:15'),(15,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,NULL,NULL),(16,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,NULL,NULL),(17,'123 Test St.','San Francisco',95054,NULL,'N/A',NULL,NULL,NULL),(18,'123 Test St.','San Francisco',95054,NULL,'N/A',NULL,NULL,NULL),(19,'4726 Armour Drive','Santa Clara',95054,'CA','N/A',1,'2016-06-28 22:42:49','2016-06-28 22:42:49'),(20,'4726 Armour Drive','Santa Clara',95054,'CA','',NULL,'2016-06-29 11:51:14','2016-06-29 11:51:14');
-/*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `bids`
 --
 
@@ -57,26 +49,15 @@ CREATE TABLE `bids` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `price` float DEFAULT NULL,
   `comment` varchar(45) DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
-  `job_id` int(11) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`,`user_id`,`job_id`),
-  KEY `fk_bids_Users1_idx` (`user_id`),
-  KEY `fk_bids_Jobs1_idx` (`job_id`),
-  CONSTRAINT `fk_bids_Jobs1` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_bids_Users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `status` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `job_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id_idx` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `bids`
---
-
-LOCK TABLES `bids` WRITE;
-/*!40000 ALTER TABLE `bids` DISABLE KEYS */;
-/*!40000 ALTER TABLE `bids` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `contractor_reviews`
@@ -93,22 +74,9 @@ CREATE TABLE `contractor_reviews` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`user_id`),
-  KEY `fk_Contractor_reviews_Contractors1_idx` (`contractor_id`),
-  KEY `fk_contractor_reviews_users1_idx` (`user_id`),
-  CONSTRAINT `fk_Contractor_reviews_Contractors1` FOREIGN KEY (`contractor_id`) REFERENCES `contractors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_contractor_reviews_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `contractor_reviews`
---
-
-LOCK TABLES `contractor_reviews` WRITE;
-/*!40000 ALTER TABLE `contractor_reviews` DISABLE KEYS */;
-/*!40000 ALTER TABLE `contractor_reviews` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `contractors`
@@ -128,15 +96,6 @@ CREATE TABLE `contractors` (
   CONSTRAINT `fk_Contractors_Users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `contractors`
---
-
-LOCK TABLES `contractors` WRITE;
-/*!40000 ALTER TABLE `contractors` DISABLE KEYS */;
-/*!40000 ALTER TABLE `contractors` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `jobs`
@@ -163,16 +122,6 @@ CREATE TABLE `jobs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `jobs`
---
-
-LOCK TABLES `jobs` WRITE;
-/*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
-INSERT INTO `jobs` VALUES (1,'Clean my Kitchen','seriously, it\'s terrifying, it needs to be cleaned.  ',NULL,NULL,'2016-06-30 18:00:00','open','2016-06-29 11:51:14','2016-06-29 11:51:14',25);
-/*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `jobs_has_addresses`
 --
 
@@ -190,16 +139,6 @@ CREATE TABLE `jobs_has_addresses` (
   CONSTRAINT `fk_Jobs_has_Addresses_Jobs1` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `jobs_has_addresses`
---
-
-LOCK TABLES `jobs_has_addresses` WRITE;
-/*!40000 ALTER TABLE `jobs_has_addresses` DISABLE KEYS */;
-INSERT INTO `jobs_has_addresses` VALUES (1,1,20);
-/*!40000 ALTER TABLE `jobs_has_addresses` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `services`
@@ -223,15 +162,6 @@ CREATE TABLE `services` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `services`
---
-
-LOCK TABLES `services` WRITE;
-/*!40000 ALTER TABLE `services` DISABLE KEYS */;
-/*!40000 ALTER TABLE `services` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `skills`
 --
 
@@ -244,15 +174,6 @@ CREATE TABLE `skills` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `skills`
---
-
-LOCK TABLES `skills` WRITE;
-/*!40000 ALTER TABLE `skills` DISABLE KEYS */;
-/*!40000 ALTER TABLE `skills` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `skills_has_contractors`
@@ -274,15 +195,6 @@ CREATE TABLE `skills_has_contractors` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `skills_has_contractors`
---
-
-LOCK TABLES `skills_has_contractors` WRITE;
-/*!40000 ALTER TABLE `skills_has_contractors` DISABLE KEYS */;
-/*!40000 ALTER TABLE `skills_has_contractors` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `skills_has_jobs`
 --
 
@@ -302,15 +214,6 @@ CREATE TABLE `skills_has_jobs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `skills_has_jobs`
---
-
-LOCK TABLES `skills_has_jobs` WRITE;
-/*!40000 ALTER TABLE `skills_has_jobs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `skills_has_jobs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `skills_has_services`
 --
 
@@ -328,15 +231,6 @@ CREATE TABLE `skills_has_services` (
   CONSTRAINT `fk_Skills_has_services_Skills1` FOREIGN KEY (`skill_id`) REFERENCES `skills` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `skills_has_services`
---
-
-LOCK TABLES `skills_has_services` WRITE;
-/*!40000 ALTER TABLE `skills_has_services` DISABLE KEYS */;
-/*!40000 ALTER TABLE `skills_has_services` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
@@ -361,16 +255,6 @@ CREATE TABLE `users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (21,'Connor','Paull','email@email.com','$2b$12$dDEq3mTLHR3uuqBj1t5bZ.OMWd4QozFtN2IqLUL5I8Bn0wraNRED2',NULL,'2016-06-28 20:49:15','2016-06-28 20:49:15','9999999999','0'),(22,'User','Two','email@email.com','$2b$12$dghk9FlDKvSytcz7zOZchef1OAQL1INMb/F8VUdCxl5cMPf5PNd9y',NULL,'2016-06-28 21:01:01','2016-06-28 21:01:01','9999999999','0'),(23,'Connor','Paull','email@email.com','$2b$12$Ix6sYO0DkOfFnmAPHQ/08O0GSJNi.evBiPBQcAPm5tcZYF/ujM652',NULL,'2016-06-28 21:04:00','2016-06-28 21:04:00','9999999999','0'),(24,'Connor','Paull','cbpaull@gmail.com','$2b$12$J37t9CnXVBN4ju5Fb8utSuwjGD.Ha3ueivyUDSjyPb4B4pltJpX2O',NULL,'2016-06-28 21:21:38','2016-06-28 21:21:38','9999999999','0'),(25,'Ceebee','Paull','testbug@gmail.com','$2b$12$GA2ebyXyY.PmjM/8r4V.eurxS7Fao1.2njanvl.Dy2uXvLigN4Jha',NULL,'2016-06-28 22:28:34','2016-06-28 22:28:34','9999999999','0'),(26,'User','Bob','testbug@gmail.com','$2b$12$y.TcxPWy19diaqQQhQIVzuGzM9NA.0yLU.e/rj1jOdPzNxOVv9J4.',NULL,'2016-06-28 22:41:07','2016-06-28 22:41:07','9999999999','0'),(27,'User','Bob','testbug@gmail.com','$2b$12$1siN4seMTVwxH4TKo8Mwuuh1UojJctLR8II7XauB8Uh2EJfmviKKm',NULL,'2016-06-28 22:42:49','2016-06-28 22:42:49','9999999999','0');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `users_has_addresses`
 --
 
@@ -390,16 +274,6 @@ CREATE TABLE `users_has_addresses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users_has_addresses`
---
-
-LOCK TABLES `users_has_addresses` WRITE;
-/*!40000 ALTER TABLE `users_has_addresses` DISABLE KEYS */;
-INSERT INTO `users_has_addresses` VALUES (1,22,15),(2,23,16),(3,24,17),(4,25,18),(5,27,19);
-/*!40000 ALTER TABLE `users_has_addresses` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `vendor_reviews`
 --
 
@@ -415,20 +289,9 @@ CREATE TABLE `vendor_reviews` (
   `updated_at` varchar(45) DEFAULT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_vendor_reviews_users1_idx` (`user_id`),
-  KEY `job_id_idx` (`job_id`),
-  CONSTRAINT `job_id` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_vendor_reviews_users1_idx` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vendor_reviews`
---
-
-LOCK TABLES `vendor_reviews` WRITE;
-/*!40000 ALTER TABLE `vendor_reviews` DISABLE KEYS */;
-/*!40000 ALTER TABLE `vendor_reviews` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `vendors`
@@ -448,15 +311,6 @@ CREATE TABLE `vendors` (
   CONSTRAINT `fk_Vendors_Users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vendors`
---
-
-LOCK TABLES `vendors` WRITE;
-/*!40000 ALTER TABLE `vendors` DISABLE KEYS */;
-/*!40000 ALTER TABLE `vendors` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -467,4 +321,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-29 13:07:14
+-- Dump completed on 2016-06-29 15:34:16

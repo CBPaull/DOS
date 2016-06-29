@@ -11,6 +11,7 @@ class Bid(Model):
 		return bids
 
 	def create_bid(self, requestform):
+		print "BIDS START HERE"
 		info = {
 			'price': requestform['price'],
 			'comment': requestform['comment'],
@@ -20,7 +21,7 @@ class Bid(Model):
 		}
 		print "BIDS START HERE"
 		print info
-		query = " INSERT INTO bids(price, comment, status, created_at, updated_at) VALUES(:price, :comment, :status, NOW(), NOW())"
+		query = " INSERT INTO bids(price, comment, status, job_id, user_id, created_at, updated_at) VALUES(:price, :comment, :status, :job_id, user_id, NOW(), NOW())"
 		self.db.query_db(query, info)
 		return {'status': True, 'job_id': requestform['job_id']}
 

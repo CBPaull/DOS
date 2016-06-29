@@ -93,6 +93,7 @@ class Jobs(Controller):
 
     def makebid(self):
         requestform = request.form
+        print requestform
         create_status = self.models['Bid'].create_bid(requestform)
         if create_status['status']:
             return redirect('/jobs/show/' + str(create_status['job_id']))
