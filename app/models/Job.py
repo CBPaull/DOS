@@ -1,4 +1,5 @@
 from system.core.model import Model
+import urllib, json
 
 JOB_STATUS = ['open', 'closed', 'completed', 'failed']
 
@@ -12,7 +13,7 @@ class Job(Model):
         query = "SELECT jobs.id AS 'job_id', jobs.title AS 'job_title', jobs.description AS 'job_description', " \
                 "user_id, jobs.time AS 'job_time', jobs.created_at AS 'posted_at', users.firstname AS 'firstname', "\
                 "users.lastname AS 'lastname', users.email AS 'email', users.phone AS 'phone', addresses.address1, " \
-                "addresses.apartment, addresses.city, addresses.zipcode  FROM jobs " \
+                "addresses.apartment, addresses.city, addresses.zipcode, addresses.state   FROM jobs " \
                 "JOIN users ON jobs.user_id = users.id  JOIN jobs_has_addresses ON jobs.id = jobs_has_addresses.job_id" \
                 " JOIN addresses ON jobs_has_addresses.address_id = addresses.id " \
                 "ORDER BY jobs.created_at DESC; "
@@ -26,7 +27,7 @@ class Job(Model):
         query = "SELECT jobs.id AS 'job_id', jobs.title AS 'job_title', jobs.description AS 'job_description', " \
                 "jobs.user_id, jobs.time AS 'job_time', jobs.created_at AS 'posted_at', users.firstname AS 'firstname', "\
                 "users.lastname AS 'lastname', users.email AS 'email', users.phone AS 'phone', addresses.address1, " \
-                "addresses.apartment, addresses.city, addresses.zipcode, jobs.status " \
+                "addresses.apartment, addresses.city, addresses.zipcode, jobs.status, addresses.state  " \
                 " FROM jobs " \
                 "JOIN users ON jobs.user_id = users.id  JOIN jobs_has_addresses ON jobs.id = jobs_has_addresses.job_id" \
                 " JOIN addresses ON jobs_has_addresses.address_id = addresses.id " \
@@ -41,7 +42,7 @@ class Job(Model):
         query = "SELECT jobs.id AS 'job_id', jobs.title AS 'job_title', jobs.description AS 'job_description', " \
                 "user_id, jobs.time AS 'job_time', jobs.created_at AS 'posted_at', users.firstname AS 'firstname', " \
                 "users.lastname AS 'lastname', users.email AS 'email', users.phone AS 'phone', addresses.address1, " \
-                "addresses.apartment, addresses.city, addresses.zipcode, jobs.status   FROM jobs " \
+                "addresses.apartment, addresses.city, addresses.zipcode, jobs.status, addresses.state    FROM jobs " \
                 "JOIN users ON jobs.user_id = users.id  JOIN jobs_has_addresses ON jobs.id = jobs_has_addresses.job_id" \
                 " JOIN addresses ON jobs_has_addresses.address_id = address.id " \
                 "WHERE user.id = :user_id; "
@@ -142,3 +143,10 @@ class Job(Model):
         self.db.query_db(query, data)
         return
 
+    def job_location_latitude_longtitude(self,address):
+        url = "https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=AIzaSyBqgY1E9_hEZftP5UgRlloVEiFaoz9iUNc"
+        response = urllib.urlopen(url)
+        data = json.loads(response.read())
+        latitude = data['results'][0]['geometry']['location']['lat']
+        longitude = data['results'][0]['geometry']['location']['lng']
+        return {'latitude':latitude, 'longitude':longitude}

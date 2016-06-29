@@ -33,7 +33,7 @@ CREATE TABLE `addresses` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `addresses` (
 
 LOCK TABLES `addresses` WRITE;
 /*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
-INSERT INTO `addresses` VALUES (14,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,'2016-06-28 20:49:15','2016-06-28 20:49:15'),(15,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,NULL,NULL),(16,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,NULL,NULL),(17,'123 Test St.','San Francisco',95054,NULL,'N/A',NULL,NULL,NULL),(18,'123 Test St.','San Francisco',95054,NULL,'N/A',NULL,NULL,NULL),(19,'4726 Armour Drive','Santa Clara',95054,'CA','N/A',1,'2016-06-28 22:42:49','2016-06-28 22:42:49');
+INSERT INTO `addresses` VALUES (14,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,'2016-06-28 20:49:15','2016-06-28 20:49:15'),(15,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,NULL,NULL),(16,'4726 Armour Drive','Santa Clara',95054,NULL,'N/A',NULL,NULL,NULL),(17,'123 Test St.','San Francisco',95054,NULL,'N/A',NULL,NULL,NULL),(18,'123 Test St.','San Francisco',95054,NULL,'N/A',NULL,NULL,NULL),(19,'4726 Armour Drive','Santa Clara',95054,'CA','N/A',1,'2016-06-28 22:42:49','2016-06-28 22:42:49'),(20,'4726 Armour Drive','Santa Clara',95054,'CA','',NULL,'2016-06-29 11:51:14','2016-06-29 11:51:14');
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,10 +87,7 @@ DROP TABLE IF EXISTS `contractor_reviews`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contractor_reviews` (
   `id` int(11) NOT NULL,
-  `quality` int(11) DEFAULT NULL,
-  `politeness` int(11) DEFAULT NULL,
-  `timeliness` int(11) DEFAULT NULL,
-  `skill` int(11) DEFAULT NULL,
+  `overall` int(11) DEFAULT NULL,
   `review` text,
   `contractor_id` int(11) NOT NULL,
   `created_at` datetime DEFAULT NULL,
@@ -162,7 +159,7 @@ CREATE TABLE `jobs` (
   PRIMARY KEY (`id`),
   KEY `user_id_idx` (`user_id`),
   CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,6 +168,7 @@ CREATE TABLE `jobs` (
 
 LOCK TABLES `jobs` WRITE;
 /*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
+INSERT INTO `jobs` VALUES (1,'Clean my Kitchen','seriously, it\'s terrifying, it needs to be cleaned.  ',NULL,NULL,'2016-06-30 18:00:00','open','2016-06-29 11:51:14','2016-06-29 11:51:14',25);
 /*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,7 +188,7 @@ CREATE TABLE `jobs_has_addresses` (
   KEY `fk_Jobs_has_Addresses_Jobs1_idx` (`job_id`),
   CONSTRAINT `fk_Jobs_has_Addresses_Addresses1` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Jobs_has_Addresses_Jobs1` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -199,6 +197,7 @@ CREATE TABLE `jobs_has_addresses` (
 
 LOCK TABLES `jobs_has_addresses` WRITE;
 /*!40000 ALTER TABLE `jobs_has_addresses` DISABLE KEYS */;
+INSERT INTO `jobs_has_addresses` VALUES (1,1,20);
 /*!40000 ALTER TABLE `jobs_has_addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -410,19 +409,15 @@ DROP TABLE IF EXISTS `vendor_reviews`;
 CREATE TABLE `vendor_reviews` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `overall` int(11) DEFAULT NULL,
-  `payment` int(11) DEFAULT NULL,
-  `polite` int(11) DEFAULT NULL,
-  `accurate` int(11) DEFAULT NULL,
   `review` text,
-  `vendor_id` int(11) NOT NULL,
+  `job_id` int(11) NOT NULL,
   `created_at` varchar(45) DEFAULT NULL,
   `updated_at` varchar(45) DEFAULT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_vendor_reviews_Vendors1_idx` (`vendor_id`),
   KEY `fk_vendor_reviews_users1_idx` (`user_id`),
-  CONSTRAINT `fk_vendor_reviews_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_vendor_reviews_Vendors1` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `job_id_idx` (`job_id`),
+  CONSTRAINT `job_id` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -472,4 +467,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-29  0:51:42
+-- Dump completed on 2016-06-29 13:07:14

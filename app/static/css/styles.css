@@ -1,5 +1,7 @@
 * {
-  font-family: monaco;
+/*  font-family: monaco;*/
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.05em;
 }
 
 body {

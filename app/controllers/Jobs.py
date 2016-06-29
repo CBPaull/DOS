@@ -6,6 +6,7 @@ class Jobs(Controller):
         super(Jobs, self).__init__(action)
         self.load_model('Job')
         self.load_model('User')
+        self.load_model('Bid')
         self.db = self._app.db
 
     def joblist(self):
@@ -22,7 +23,31 @@ class Jobs(Controller):
     def show(self, job_id):
         # Show job by job_id. Render
         job = self.models['Job'].get_job_by_id(job_id)
-        return self.load_view('/jobs/show.html', job=job[0])
+        
+        if len(job[0]['apartment']) != 0:
+            address = str(job[0]['address1']) + ' ' + str(job[0]['apartment']) + ' '  + str(job[0]['city']) + ' '  + str(job[0]['zipcode'])
+        else:
+            address = str(job[0]['address1']) + ' '  + str(job[0]['city']) + ' '  + str(job[0]['zipcode'])
+        
+        latlong = self.models['Job'].job_location_latitude_longtitude(address)
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print latlong
+        bids = self.models['Bid'].show_job_bids(job_id)
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print bids
+        return self.load_view('/jobs/show.html', job=job[0], latlong=latlong, bids=bids)
 
     def edit(self, job_id):
         # Edit job by job_id. Render
@@ -65,3 +90,37 @@ class Jobs(Controller):
         # Process destroy job. Redirect
         self.models['Job'].destroy_job(job_id)
         return redirect('/jobs/joblist')
+
+    def makebid(self):
+        requestform = request.form
+        create_status = self.models['Bid'].create_bid(requestform)
+        if create_status['status']:
+            return redirect('/jobs/show/' + str(create_status['job_id']))
+        else:
+            return redirect('/jobs/show/' + str(create_status['job_id']))
+
+    def changebidstatus(self):
+        # bid status in request form will either be a 1 for rejecting a bid
+        # or  a 2 for accepting a bid.
+        # other things like id, user_id, and job_id will be stored in 
+        # hidden values as well.
+        requestform = request.form
+        change_status = self.models['Bid'].change_bid_status(requestform)
+        if change_status['status']:
+            return redirect('/jobs/show/' + str(create_status['job_id']))
+        else:
+            return redirect('/jobs/show/' + str(create_status['job_id']))
+
+    def removebid(self):
+        requestform = request.form
+        remove_status = self.models['Bid'].destroy_bid(requestform)
+        if remove_status['status']:
+            return redirect('/jobs/show/' + str(create_status['job_id']))
+        else:
+            return redirect('/jobs/show/' + str(create_status['job_id']))
+
+    def add_review(self, job_id):
+        # Displays a job review page.  Render.
+        job = self.models['Job'].get_job_by_id(job_id)
+        return self.load_view('/jobs/addreview.html', job=job[0])
+    

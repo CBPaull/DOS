@@ -15,17 +15,17 @@
 				<p>posted by: <a href="/users/show/{{ job['user_id'] }}">{{ job['firstname']}} {{ job['lastname'] }}</a></p>
 				<p>posted at: {{ job['posted_at'] }}</p>
 				<p>scheduled for: {{ job['job_time'] }}</p>
-				<p>address: {{ job['address1']}} {{ job['apartment']}} {{ job['city']}} {{ job['zipcode']}}</p> 
+				<p>address: {{ job['address1']}} {{ job['apartment']}}
+				<br>{{ job['city']}} {{ job['state'] }} {{ job['zipcode']}}</p> 
 				<hr>
 			</div>
 			<div class="col-md-5" id="map">
 				<script>
 					function initMap() {
-						
-						var myLatLng = {lat: 38.3, lng: -76.51};
+						var myLatLng = {lat: {{latlong['latitude']}}, lng: {{latlong['longitude']}}};
 
 						var map = new google.maps.Map(document.getElementById('map'), {
-						zoom: 20,
+						zoom: 15,
 						center: myLatLng
 						});
 
@@ -46,7 +46,56 @@
 				
 			</div>
 			<div class="col-md-10">
-				Current bids
+				Current bids:
+				<!-- Table should be set up with a certain height and scroll on overflow active -->
+				<table>
+				<thead>
+					<td>Price</td>
+					<td>Comment</td>
+					<td>User</td>
+					<td>Submitted at</td>
+					<td>Actions</td>
+				</thead>
+				<tbody>
+					{% for bid in bids %}
+					<tr>
+						<td>{{ bid['price'] }}</td>
+						<td>{{ bid['comment'] }}</td>
+						<td>{{ bid['firstname'] }} {{ bid['lastname'] }}</td>
+						<td>{{ bid['created_at'] }}</td>
+						<td>
+							<form action="/jobs/changebidstatus" method="POST">
+								<input type="hidden" name="bid['id']">
+								<input type="hidden" name="status" value="2">
+								<input type="hidden" name="user_id" value="{{ session['id'] }}">
+								<input type="hidden" name="job_id" value="{{ job['id'] }}">
+								<input type="submit" name="submit" value="Accept Bid">
+								<!-- color accept button green -->
+							</form>
+							<form action="/jobs/changebidstatus" method="POST">
+								<input type="hidden" name="bid['id']">
+								<input type="hidden" name="status" value="1">
+								<input type="hidden" name="user_id" value="{{ session['id'] }}">
+								<input type="hidden" name="job_id" value="{{ job['id'] }}">
+								<input type="submit" name="submit" value="Reject Bid">
+								<!-- color accept button red -->
+							</form>
+						</td>
+					</tr>
+					{% endfor %}
+						<!-- Update and submit forms go here -->
+					</tr>
+				</tbody>
+				<!-- Display current bids -->
+				<!-- Show form to users who did not create the job -->
+				<form action="/jobs/makebid" method="POST">
+
+					<p>price: <input type="number" name="price"></p>
+					<p>comment: <input type="text" name="comment"></p>
+					<input type="hidden" name="user_id" value="{{ session['id'] }}">
+					<input type="hidden" name="job_id" value="{{ job['id'] }}">
+					<input type="submit" name="submit" value="Make Bid">
+				</form>
 			</div>
 		</div>
     </div> <!-- /container -->

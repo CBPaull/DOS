@@ -14,7 +14,7 @@
 			<p>posted by: <a href="/users/show/{{ job['user_id'] }}">{{ job['firstname']}} {{ job['lastname'] }}</a></p>
 			<p>posted at: {{ job['posted_at'] }}</p>
 			<p>scheduled for: {{ job['job_time'] }}</p>
-			<p>address: {{ job['address1']}} {{ job['apartment']}} {{ job['city']}} {{ job['zipcode']}}</p> 
+			<p>address: {{ job['address1']}} {{ job['apartment']}} {{ job['city']}} {{ job['state'] }} {{ job['zipcode']}}</p> 
 			<hr>
 		{% endfor %}
 	{% endif %}
