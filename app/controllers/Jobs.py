@@ -5,7 +5,7 @@ class Jobs(Controller):
     def __init__(self, action):
         super(Jobs, self).__init__(action)
         self.load_model('Job')
-        self.load.model('User')
+        self.load_model('User')
         self.db = self._app.db
 
     def joblist(self):
