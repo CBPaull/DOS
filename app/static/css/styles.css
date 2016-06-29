@@ -1,6 +1,17 @@
 * {
   font-family: monaco;
 }
+
+body {
+  min-height: 800px;
+  padding-top: 75px;
+}
+
+.container {
+    width: 90%;
+    padding: 1em;
+}
+
 .alignRight{
     padding-top: 1%;
 	padding-left: 18%;
