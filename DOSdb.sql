@@ -1,338 +1,463 @@
--- MySQL Workbench Forward Engineering
+-- MySQL dump 10.13  Distrib 5.7.9, for osx10.9 (x86_64)
+--
+-- Host: 127.0.0.1    Database: DOSdb
+-- ------------------------------------------------------
+-- Server version	5.5.42
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- -----------------------------------------------------
--- Schema DOSdb
--- -----------------------------------------------------
+--
+-- Table structure for table `addresses`
+--
 
--- -----------------------------------------------------
--- Schema DOSdb
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `DOSdb` DEFAULT CHARACTER SET utf8 ;
-USE `DOSdb` ;
+DROP TABLE IF EXISTS `addresses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `addresses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `address1` varchar(45) DEFAULT NULL,
+  `city` varchar(45) DEFAULT NULL,
+  `zipcode` int(11) DEFAULT NULL,
+  `apartment` varchar(45) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- -----------------------------------------------------
--- Table `DOSdb`.`users`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`users` (
-  `id` INT NOT NULL,
-  `firstname` VARCHAR(45) NULL,
-  `lastname` VARCHAR(45) NULL,
-  `email` VARCHAR(45) NULL,
-  `pw_hash` VARCHAR(500) NULL,
-  `servicename` VARCHAR(45) NULL,
-  `created_at` DATETIME NULL,
-  `updated_at` DATETIME NULL,
-  `phone` VARCHAR(45) NULL,
-  `user_level` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+--
+-- Dumping data for table `addresses`
+--
 
+LOCK TABLES `addresses` WRITE;
+/*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- -----------------------------------------------------
--- Table `DOSdb`.`addresses`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`addresses` (
-  `id` INT NOT NULL,
-  `address1` VARCHAR(45) NULL,
-  `city` VARCHAR(45) NULL,
-  `zipcode` INT NULL,
-  `apartment` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+--
+-- Table structure for table `bids`
+--
 
+DROP TABLE IF EXISTS `bids`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bids` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `price` float DEFAULT NULL,
+  `comment` varchar(45) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `job_id` int(11) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`,`user_id`,`job_id`),
+  KEY `fk_bids_Users1_idx` (`user_id`),
+  KEY `fk_bids_Jobs1_idx` (`job_id`),
+  CONSTRAINT `fk_bids_Jobs1` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_bids_Users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- -----------------------------------------------------
--- Table `DOSdb`.`users_has_addresses`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`users_has_addresses` (
-  `users_id` INT NOT NULL,
-  `addresses_id` INT NOT NULL,
-  PRIMARY KEY (`users_id`, `addresses_id`),
-  INDEX `fk_Users_has_Addresses_Addresses1_idx` (`addresses_id` ASC),
-  INDEX `fk_Users_has_Addresses_Users_idx` (`users_id` ASC),
-  CONSTRAINT `fk_Users_has_Addresses_Users`
-    FOREIGN KEY (`users_id`)
-    REFERENCES `DOSdb`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Users_has_Addresses_Addresses1`
-    FOREIGN KEY (`addresses_id`)
-    REFERENCES `DOSdb`.`addresses` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+--
+-- Dumping data for table `bids`
+--
 
+LOCK TABLES `bids` WRITE;
+/*!40000 ALTER TABLE `bids` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bids` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- -----------------------------------------------------
--- Table `DOSdb`.`vendors`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`vendors` (
-  `id` INT NOT NULL,
-  `description` VARCHAR(500) NULL,
-  `created_at` VARCHAR(45) NULL,
-  `updated_at` VARCHAR(45) NULL,
-  `users_id` INT NOT NULL,
+--
+-- Table structure for table `contractor_reviews`
+--
+
+DROP TABLE IF EXISTS `contractor_reviews`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contractor_reviews` (
+  `id` int(11) NOT NULL,
+  `quality` int(11) DEFAULT NULL,
+  `politeness` int(11) DEFAULT NULL,
+  `timeliness` int(11) DEFAULT NULL,
+  `skill` int(11) DEFAULT NULL,
+  `review` text,
+  `contractor_id` int(11) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`user_id`),
+  KEY `fk_Contractor_reviews_Contractors1_idx` (`contractor_id`),
+  KEY `fk_contractor_reviews_users1_idx` (`user_id`),
+  CONSTRAINT `fk_Contractor_reviews_Contractors1` FOREIGN KEY (`contractor_id`) REFERENCES `contractors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_contractor_reviews_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `contractor_reviews`
+--
+
+LOCK TABLES `contractor_reviews` WRITE;
+/*!40000 ALTER TABLE `contractor_reviews` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contractor_reviews` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `contractors`
+--
+
+DROP TABLE IF EXISTS `contractors`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contractors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(500) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`user_id`),
+  KEY `fk_Contractors_Users1_idx` (`user_id`),
+  CONSTRAINT `fk_Contractors_Users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `contractors`
+--
+
+LOCK TABLES `contractors` WRITE;
+/*!40000 ALTER TABLE `contractors` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contractors` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `jobs`
+--
+
+DROP TABLE IF EXISTS `jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jobs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `price` varchar(45) DEFAULT NULL,
+  `vendors_id` int(11) NOT NULL,
+  `time` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Vendors_Users1_idx` (`users_id` ASC),
-  CONSTRAINT `fk_Vendors_Users1`
-    FOREIGN KEY (`users_id`)
-    REFERENCES `DOSdb`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  KEY `fk_Jobs_Vendors1_idx` (`vendors_id`),
+  CONSTRAINT `fk_Jobs_Vendors1` FOREIGN KEY (`vendors_id`) REFERENCES `vendors` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `jobs`
+--
 
--- -----------------------------------------------------
--- Table `DOSdb`.`contractors`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`contractors` (
-  `id` INT NOT NULL,
-  `description` VARCHAR(500) NULL,
-  `created_at` DATETIME NULL,
-  `updated_at` DATETIME NULL,
-  `users_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `users_id`),
-  INDEX `fk_Contractors_Users1_idx` (`users_id` ASC),
-  CONSTRAINT `fk_Contractors_Users1`
-    FOREIGN KEY (`users_id`)
-    REFERENCES `DOSdb`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+LOCK TABLES `jobs` WRITE;
+/*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `jobs_has_addresses`
+--
 
--- -----------------------------------------------------
--- Table `DOSdb`.`vendor_reviews`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`vendor_reviews` (
-  `id` INT NOT NULL,
-  `overall` INT NULL,
-  `payment` INT NULL,
-  `polite` INT NULL,
-  `accurate` INT NULL,
-  `review` TEXT NULL,
-  `vendors_id` INT NOT NULL,
-  `created_at` VARCHAR(45) NULL,
-  `updated_at` VARCHAR(45) NULL,
-  `users_id` INT NOT NULL,
+DROP TABLE IF EXISTS `jobs_has_addresses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jobs_has_addresses` (
+  `jobs_id` int(11) NOT NULL,
+  `addresses_id` int(11) NOT NULL,
+  PRIMARY KEY (`jobs_id`,`addresses_id`),
+  KEY `fk_Jobs_has_Addresses_Addresses1_idx` (`addresses_id`),
+  KEY `fk_Jobs_has_Addresses_Jobs1_idx` (`jobs_id`),
+  CONSTRAINT `fk_Jobs_has_Addresses_Jobs1` FOREIGN KEY (`jobs_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Jobs_has_Addresses_Addresses1` FOREIGN KEY (`addresses_id`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `jobs_has_addresses`
+--
+
+LOCK TABLES `jobs_has_addresses` WRITE;
+/*!40000 ALTER TABLE `jobs_has_addresses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jobs_has_addresses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `services`
+--
+
+DROP TABLE IF EXISTS `services`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `services` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `price` varchar(45) DEFAULT NULL,
+  `contractors_id` int(11) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_vendor_reviews_Vendors1_idx` (`vendors_id` ASC),
-  INDEX `fk_vendor_reviews_users1_idx` (`users_id` ASC),
-  CONSTRAINT `fk_vendor_reviews_Vendors1`
-    FOREIGN KEY (`vendors_id`)
-    REFERENCES `DOSdb`.`vendors` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_vendor_reviews_users1`
-    FOREIGN KEY (`users_id`)
-    REFERENCES `DOSdb`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  KEY `fk_services_Contractors1_idx` (`contractors_id`),
+  CONSTRAINT `fk_services_Contractors1` FOREIGN KEY (`contractors_id`) REFERENCES `contractors` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `services`
+--
 
--- -----------------------------------------------------
--- Table `DOSdb`.`contractor_reviews`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`contractor_reviews` (
-  `id` INT NOT NULL,
-  `quality` INT NULL,
-  `politeness` INT NULL,
-  `timeliness` INT NULL,
-  `skill` INT NULL,
-  `review` TEXT NULL,
-  `contractors_id` INT NOT NULL,
-  `created_at` DATETIME NULL,
-  `updated_at` DATETIME NULL,
-  `users_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `users_id`),
-  INDEX `fk_Contractor_reviews_Contractors1_idx` (`contractors_id` ASC),
-  INDEX `fk_contractor_reviews_users1_idx` (`users_id` ASC),
-  CONSTRAINT `fk_Contractor_reviews_Contractors1`
-    FOREIGN KEY (`contractors_id`)
-    REFERENCES `DOSdb`.`contractors` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_contractor_reviews_users1`
-    FOREIGN KEY (`users_id`)
-    REFERENCES `DOSdb`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+LOCK TABLES `services` WRITE;
+/*!40000 ALTER TABLE `services` DISABLE KEYS */;
+/*!40000 ALTER TABLE `services` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `skills`
+--
 
--- -----------------------------------------------------
--- Table `DOSdb`.`skills`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`skills` (
-  `id` INT NOT NULL,
-  `skill` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+DROP TABLE IF EXISTS `skills`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `skills` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `skill` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `skills`
+--
 
--- -----------------------------------------------------
--- Table `DOSdb`.`services`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`services` (
-  `id` INT NOT NULL,
-  `title` VARCHAR(45) NULL,
-  `description` VARCHAR(500) NULL,
-  `price` VARCHAR(45) NULL,
-  `contractors_id` INT NOT NULL,
-  `created_at` DATETIME NULL,
-  `updated_at` DATETIME NULL,
+LOCK TABLES `skills` WRITE;
+/*!40000 ALTER TABLE `skills` DISABLE KEYS */;
+/*!40000 ALTER TABLE `skills` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `skills_has_contractors`
+--
+
+DROP TABLE IF EXISTS `skills_has_contractors`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `skills_has_contractors` (
+  `skills_id` int(11) NOT NULL,
+  `contractors_id` int(11) NOT NULL,
+  PRIMARY KEY (`skills_id`,`contractors_id`),
+  KEY `fk_skills_has_contractors_contractors1_idx` (`contractors_id`),
+  KEY `fk_skills_has_contractors_skills1_idx` (`skills_id`),
+  CONSTRAINT `fk_skills_has_contractors_skills1` FOREIGN KEY (`skills_id`) REFERENCES `skills` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_skills_has_contractors_contractors1` FOREIGN KEY (`contractors_id`) REFERENCES `contractors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `skills_has_contractors`
+--
+
+LOCK TABLES `skills_has_contractors` WRITE;
+/*!40000 ALTER TABLE `skills_has_contractors` DISABLE KEYS */;
+/*!40000 ALTER TABLE `skills_has_contractors` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `skills_has_jobs`
+--
+
+DROP TABLE IF EXISTS `skills_has_jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `skills_has_jobs` (
+  `skills_id` int(11) NOT NULL,
+  `jobs_id` int(11) NOT NULL,
+  PRIMARY KEY (`skills_id`,`jobs_id`),
+  KEY `fk_Skills_has_Jobs_Jobs1_idx` (`jobs_id`),
+  KEY `fk_Skills_has_Jobs_Skills1_idx` (`skills_id`),
+  CONSTRAINT `fk_Skills_has_Jobs_Skills1` FOREIGN KEY (`skills_id`) REFERENCES `skills` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Skills_has_Jobs_Jobs1` FOREIGN KEY (`jobs_id`) REFERENCES `jobs` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `skills_has_jobs`
+--
+
+LOCK TABLES `skills_has_jobs` WRITE;
+/*!40000 ALTER TABLE `skills_has_jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `skills_has_jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `skills_has_services`
+--
+
+DROP TABLE IF EXISTS `skills_has_services`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `skills_has_services` (
+  `skills_id` int(11) NOT NULL,
+  `services_id` int(11) NOT NULL,
+  PRIMARY KEY (`skills_id`,`services_id`),
+  KEY `fk_Skills_has_services_services1_idx` (`services_id`),
+  KEY `fk_Skills_has_services_Skills1_idx` (`skills_id`),
+  CONSTRAINT `fk_Skills_has_services_Skills1` FOREIGN KEY (`skills_id`) REFERENCES `skills` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Skills_has_services_services1` FOREIGN KEY (`services_id`) REFERENCES `services` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `skills_has_services`
+--
+
+LOCK TABLES `skills_has_services` WRITE;
+/*!40000 ALTER TABLE `skills_has_services` DISABLE KEYS */;
+/*!40000 ALTER TABLE `skills_has_services` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `firstname` varchar(45) DEFAULT NULL,
+  `lastname` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `pw_hash` varchar(500) DEFAULT NULL,
+  `servicename` varchar(45) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `user_level` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users_has_addresses`
+--
+
+DROP TABLE IF EXISTS `users_has_addresses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_has_addresses` (
+  `users_id` int(11) NOT NULL,
+  `addresses_id` int(11) NOT NULL,
+  PRIMARY KEY (`users_id`,`addresses_id`),
+  KEY `fk_Users_has_Addresses_Addresses1_idx` (`addresses_id`),
+  KEY `fk_Users_has_Addresses_Users_idx` (`users_id`),
+  CONSTRAINT `fk_Users_has_Addresses_Users` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Users_has_Addresses_Addresses1` FOREIGN KEY (`addresses_id`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_has_addresses`
+--
+
+LOCK TABLES `users_has_addresses` WRITE;
+/*!40000 ALTER TABLE `users_has_addresses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users_has_addresses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vendor_reviews`
+--
+
+DROP TABLE IF EXISTS `vendor_reviews`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vendor_reviews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `overall` int(11) DEFAULT NULL,
+  `payment` int(11) DEFAULT NULL,
+  `polite` int(11) DEFAULT NULL,
+  `accurate` int(11) DEFAULT NULL,
+  `review` text,
+  `vendors_id` int(11) NOT NULL,
+  `created_at` varchar(45) DEFAULT NULL,
+  `updated_at` varchar(45) DEFAULT NULL,
+  `users_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_services_Contractors1_idx` (`contractors_id` ASC),
-  CONSTRAINT `fk_services_Contractors1`
-    FOREIGN KEY (`contractors_id`)
-    REFERENCES `DOSdb`.`contractors` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  KEY `fk_vendor_reviews_Vendors1_idx` (`vendors_id`),
+  KEY `fk_vendor_reviews_users1_idx` (`users_id`),
+  CONSTRAINT `fk_vendor_reviews_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_vendor_reviews_Vendors1` FOREIGN KEY (`vendors_id`) REFERENCES `vendors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `vendor_reviews`
+--
 
--- -----------------------------------------------------
--- Table `DOSdb`.`jobs`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`jobs` (
-  `id` INT NOT NULL,
-  `title` VARCHAR(45) NULL,
-  `description` VARCHAR(500) NULL,
-  `price` VARCHAR(45) NULL,
-  `vendors_id` INT NOT NULL,
-  `time` DATETIME NULL,
-  `created_at` DATETIME NULL,
-  `updated_at` DATETIME NULL,
+LOCK TABLES `vendor_reviews` WRITE;
+/*!40000 ALTER TABLE `vendor_reviews` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vendor_reviews` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vendors`
+--
+
+DROP TABLE IF EXISTS `vendors`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vendors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(500) DEFAULT NULL,
+  `created_at` varchar(45) DEFAULT NULL,
+  `updated_at` varchar(45) DEFAULT NULL,
+  `users_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Jobs_Vendors1_idx` (`vendors_id` ASC),
-  CONSTRAINT `fk_Jobs_Vendors1`
-    FOREIGN KEY (`vendors_id`)
-    REFERENCES `DOSdb`.`vendors` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  KEY `fk_Vendors_Users1_idx` (`users_id`),
+  CONSTRAINT `fk_Vendors_Users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `vendors`
+--
 
--- -----------------------------------------------------
--- Table `DOSdb`.`skills_has_services`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`skills_has_services` (
-  `skills_id` INT NOT NULL,
-  `services_id` INT NOT NULL,
-  PRIMARY KEY (`skills_id`, `services_id`),
-  INDEX `fk_Skills_has_services_services1_idx` (`services_id` ASC),
-  INDEX `fk_Skills_has_services_Skills1_idx` (`skills_id` ASC),
-  CONSTRAINT `fk_Skills_has_services_Skills1`
-    FOREIGN KEY (`skills_id`)
-    REFERENCES `DOSdb`.`skills` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Skills_has_services_services1`
-    FOREIGN KEY (`services_id`)
-    REFERENCES `DOSdb`.`services` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+LOCK TABLES `vendors` WRITE;
+/*!40000 ALTER TABLE `vendors` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vendors` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- -----------------------------------------------------
--- Table `DOSdb`.`skills_has_jobs`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`skills_has_jobs` (
-  `skills_id` INT NOT NULL,
-  `jobs_id` INT NOT NULL,
-  PRIMARY KEY (`skills_id`, `jobs_id`),
-  INDEX `fk_Skills_has_Jobs_Jobs1_idx` (`jobs_id` ASC),
-  INDEX `fk_Skills_has_Jobs_Skills1_idx` (`skills_id` ASC),
-  CONSTRAINT `fk_Skills_has_Jobs_Skills1`
-    FOREIGN KEY (`skills_id`)
-    REFERENCES `DOSdb`.`skills` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Skills_has_Jobs_Jobs1`
-    FOREIGN KEY (`jobs_id`)
-    REFERENCES `DOSdb`.`jobs` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `DOSdb`.`bids`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`bids` (
-  `id` INT NOT NULL,
-  `price` FLOAT NULL,
-  `comment` VARCHAR(45) NULL,
-  `users_id` INT NOT NULL,
-  `jobs_id` INT NOT NULL,
-  `created_at` DATETIME NULL,
-  `updated_at` DATETIME NULL,
-  PRIMARY KEY (`id`, `users_id`, `jobs_id`),
-  INDEX `fk_bids_Users1_idx` (`users_id` ASC),
-  INDEX `fk_bids_Jobs1_idx` (`jobs_id` ASC),
-  CONSTRAINT `fk_bids_Users1`
-    FOREIGN KEY (`users_id`)
-    REFERENCES `DOSdb`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_bids_Jobs1`
-    FOREIGN KEY (`jobs_id`)
-    REFERENCES `DOSdb`.`jobs` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `DOSdb`.`jobs_has_addresses`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`jobs_has_addresses` (
-  `jobs_id` INT NOT NULL,
-  `addresses_id` INT NOT NULL,
-  PRIMARY KEY (`jobs_id`, `addresses_id`),
-  INDEX `fk_Jobs_has_Addresses_Addresses1_idx` (`addresses_id` ASC),
-  INDEX `fk_Jobs_has_Addresses_Jobs1_idx` (`jobs_id` ASC),
-  CONSTRAINT `fk_Jobs_has_Addresses_Jobs1`
-    FOREIGN KEY (`jobs_id`)
-    REFERENCES `DOSdb`.`jobs` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Jobs_has_Addresses_Addresses1`
-    FOREIGN KEY (`addresses_id`)
-    REFERENCES `DOSdb`.`addresses` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `DOSdb`.`skills_has_contractors`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `DOSdb`.`skills_has_contractors` (
-  `skills_id` INT NOT NULL,
-  `contractors_id` INT NOT NULL,
-  PRIMARY KEY (`skills_id`, `contractors_id`),
-  INDEX `fk_skills_has_contractors_contractors1_idx` (`contractors_id` ASC),
-  INDEX `fk_skills_has_contractors_skills1_idx` (`skills_id` ASC),
-  CONSTRAINT `fk_skills_has_contractors_skills1`
-    FOREIGN KEY (`skills_id`)
-    REFERENCES `DOSdb`.`skills` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_skills_has_contractors_contractors1`
-    FOREIGN KEY (`contractors_id`)
-    REFERENCES `DOSdb`.`contractors` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+-- Dump completed on 2016-06-28 20:32:58
