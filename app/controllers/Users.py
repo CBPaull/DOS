@@ -43,29 +43,27 @@ class Users(Controller):
 
     def login(self):
         requestform = request.form
-        user = self.models['User'].login_user(requestform)
-        session['id'] = user['id']
-        return redirect('/users/show_employer_dashboard')
+        login_status = self.models['User'].login_user(requestform)
+        session['id'] = login_status['user']['id']
+        return redirect('/users/vendor/'+str(session['id']))
 
 
     def create(self):
         requestform = request.form
-        user = self.models['User'].add_user(requestform)
-        print user
-        session['id'] = user['id']
-        return redirect('/users/show_employer_dashboard')
+        create_status = self.models['User'].add_user(requestform)
+        session['id'] = create_status['user']['id'] 
+        return redirect('/users/vendor/'+str(session['id']))
 
     def update(self, u_id):
-        user = self.models['User'].update_user(requestform)
-        session['id'] = user['id']
-        return redirect('/users/show_employer_dashboard')
+        update_status = self.models['User'].update_user(requestform)
+        return redirect('/users/vendor/'+str(session['id']))
         # POST pass requestform to model update
 
     def update_address(self, u_id):
         requestform = request.form
-        user = self.models['User'].insert_address(requestform, u_id)
-        session['id'] = user['id']
-        return redirect('/users/show_employer_dashboard')
+        update_status = self.models['User'].insert_address(requestform, u_id)
+        session['id'] = update_status['user']['id']
+        return redirect('/users/vendor/'+str(session['id']))
         #Insert new address, addresses can be added or deleted.
         # #Delete removes foreign key assignment
 
@@ -77,6 +75,6 @@ class Users(Controller):
     def destroyaddress(self):
         requestform = request.form
         self.models['User'].delete_address(requestform)
-        return redirect('/users/show_employer_dashboard')
+        return redirect('/users/vendor/'+str(session['id']))
 
 
