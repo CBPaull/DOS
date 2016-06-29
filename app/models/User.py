@@ -5,7 +5,7 @@ class User(Model):
     def __init__(self):
         super(User, self).__init__()
 
-    def show_users(self):
+    def get_all_users(self):
         query = "SELECT * FROM users"
         users = self.db.query_db(query)
         return users
@@ -15,6 +15,12 @@ class User(Model):
         query = "SELECT * FROM users WHERE id = :user_id"
         user = self.db.query_db(query, info)
         return user
+
+    def show_vendor(self, user_id):
+        info = {'user_id': user_id}
+        query = "SELECT * FROM vendors WHERE user_id = :user_id"
+        vendor = self.db.query_db(query, info)
+        return vendor
 
     def show_addresses(self, user_id):
         info = { 'user_id': user_id }
@@ -124,10 +130,14 @@ class User(Model):
             'email': requestform['email'],
             'phone': requestform['phone'],
             'servicename': requestform['servicename'],
-            'user_level': requestform['user_level']
+            'user_level': requestform['user_level'],
+            'password': requestform['password'],
+            'confirmation': requestform['confirmation'],
+            'id': requestform['id']
         }
         EMAIL_REGEX = re.compile(r'^[a-za-z0-9\.\+_-]+@[a-za-z0-9\._-]+\.[a-za-z]*$')
         USER_REGEX = re.compile(r'^[a-zA-Z]+$')
+        PASS_REGEX = re.compile(r'\d.*[A-Z]|[A-Z].*\d')
         errors = []
         if not info['firstname']:
             errors.append('First name cannot be blank')
@@ -145,21 +155,6 @@ class User(Model):
             errors.append('Email cannot be blank')
         elif not EMAIL_REGEX.match(info['email']):
             errors.append('Email format must be valid!')
-        if errors:
-            return {"status": False, "errors": errors, "user_id": info['id']}
-        else:
-            query = "UPDATE users SET firstname=:firstname, lastname=:lastname, email=:email, phone=:phone, servicename=:servicename, user_level=:user_level, updated_at=NOW() WHERE id=:id"
-            self.db.query_db(query, info)
-            return {"status": True, "id": info['id']}
-
-    def pw_update(self, requestform):
-        info = {
-            'password': requestform['password'],
-            'confirmation': requestform['confirmation'],
-            'id': requestform['id']
-        }
-        errors = []
-        PASS_REGEX = re.compile(r'\d.*[A-Z]|[A-Z].*\d')
         if not info['password']:
             errors.append('Password cannot be blank')
         elif len(info['password']) < 8:
@@ -168,16 +163,20 @@ class User(Model):
             errors.append('Password must contain an uppercase letter and a number')
         elif info['password'] != info['confirmation']:
             errors.append('Password and confirmation must match!')
-        # If we hit errors, return them, else return True.
         if errors:
             return {"status": False, "errors": errors, "user_id": info['id']}
         else:
-            pw_hash = self.bcrypt.generate_password_hash(info['password'])
-            query = "UPDATE users SET pw_hash= pw_hash WHERE id=:id"
+            query = "UPDATE users SET firstname=:firstname, lastname=:lastname, email=:email, phone=:phone, servicename=:servicename, user_level=:user_level, updated_at=NOW() WHERE id=:id"
             self.db.query_db(query, info)
+            pw_hash = self.bcrypt.generate_password_hash(info['password'])
+            pwinfo = {
+                'pw_hash': pw_hash
+            }
+            pwquery = "UPDATE users SET pw_hash= :pw_hash WHERE id=:id"
+            self.db.query_db(pwquery, pwinfo)
             return {"status": True, "id": info['id']}
 
-    def address_insert(self, requestform, user_id):
+    def insert_address(self, requestform, user_id):
         address = {
             'address1': requestform['address1'],
             'city': requestform['city'],
@@ -206,7 +205,7 @@ class User(Model):
 
     def delete_address(self, requestform):
         info = {
-            'addresses_id': requestform['addresses_id']
+            'addresses_id': requestform['addresses_id'],
             'users_id': requestform['users_id']  
         }
         query = "DELETE FROM users_has_addresses WHERE addresses_id=:addresses_id AND users_id=:users_id"
