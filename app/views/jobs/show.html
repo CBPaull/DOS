@@ -21,10 +21,10 @@
 			<div class="col-md-5" id="map">
 				<script>
 					function initMap() {
-						var myLatLng = {lat: 38.3, lng: -76.51};
+						var myLatLng = {lat: {{latlong['latitude']}}, lng: {{latlong['longitude']}}};
 
 						var map = new google.maps.Map(document.getElementById('map'), {
-						zoom: 20,
+						zoom: 15,
 						center: myLatLng
 						});
 
