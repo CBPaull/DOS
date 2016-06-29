@@ -5,9 +5,9 @@ routes['default_controller'] = 'Users'
 # Login Registration Page. Render
 routes['/users/logreg'] = 'Users#logreg'
 # Show User page. Render
-routes['/users/show/<user_id>'] 'Users#show'
+routes['/users/show/<user_id>'] = 'Users#show'
 # Edit User page. Render
-routes['/users/edit/<user_id>'] 'Users#edit'
+routes['/users/edit/<user_id>'] = 'Users#edit'
 # Show Vendor page. Render
 routes['/users/vendor/<user_id>'] = 'Users#vendor'
 # Show Contractor page. Render
@@ -15,7 +15,7 @@ routes['/users/contractor'] = 'Users#contractor'
 # Show search page. Render
 routes['/search'] = 'Users#search'
 # List of all users. Render
-routes['/users/userlist'] 'Users#userlist'
+routes['/users/userlist'] = 'Users#userlist'
 # Page for adding new job. Render.
 routes['/jobs/addnew'] = 'Jobs#addnew'
 # Show wall of jobs. Render
@@ -43,7 +43,11 @@ routes['POST']['/jobs/update_status/<job_id>'] = 'Jobs#confirm'
 # Process Destroy user
 routes['POST']['/users/destroy/<user_id'] = 'Users#destroy'
 # Process destroy job
-routes['POST']['/jobs/destroy/<job_id>']
+routes['POST']['/jobs/destroy/<job_id>'] = 'Jobs#destroy'
+
+
+# Process a vendor review
+# Process a contractor review
 
 
 # Show all bids on job_id.  Render
