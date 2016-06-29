@@ -22,7 +22,23 @@ class Jobs(Controller):
     def show(self, job_id):
         # Show job by job_id. Render
         job = self.models['Job'].get_job_by_id(job_id)
-        return self.load_view('/jobs/show.html', job=job[0])
+        
+        if len(job[0]['apartment']) != 0:
+            address = str(job[0]['address1']) + ' ' + str(job[0]['apartment']) + ' '  + str(job[0]['city']) + ' '  + str(job[0]['zipcode'])
+        else:
+            address = str(job[0]['address1']) + ' '  + str(job[0]['city']) + ' '  + str(job[0]['zipcode'])
+        
+        latlong = self.models['Job'].job_location_latitude_longtitude(address)
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print 'haha'
+        print latlong
+
+        return self.load_view('/jobs/show.html', job=job[0], latlong=latlong)
 
     def edit(self, job_id):
         # Edit job by job_id. Render
