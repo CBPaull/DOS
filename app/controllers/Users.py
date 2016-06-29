@@ -15,7 +15,8 @@ class Users(Controller):
 
     def showall(self):
         all_users = self.models['User'].get_all_users()
-        return self.load_view('allusers.html', all_users=all_users)
+        # print all_users
+        return self.load_view('users/allusers.html', all_users=all_users)
 
     # user list
     def vendor(self, u_id):
@@ -32,27 +33,39 @@ class Users(Controller):
         jobs = self.models['Job'].get_jobs_by_userid(u_id)
         return self.load_view('/users/dashboard_employer.html', user=user, address=address, jobs=jobs)
 
-    def show(self, u_id):
-        user = self.models['User'].show_user(u_id)
-        return self.load_view('/users/show_user.html', user= user)
+    def show(self, user_id):
+        user = self.models['User'].show_user(user_id)
+        print user
+        return self.load_view('/users/show.html', user=user[0])
 
     def edit(self):
         u_id = session['id']
         user = self.models['User'].show_user(u_id)
-        return self.load_view('users/edit_user', user= user)
+        return self.load_view('users/edit.html', user= user)
 
     def login(self):
         requestform = request.form
         login_status = self.models['User'].login_user(requestform)
-        session['id'] = login_status['user']['id']
-        return redirect('/users/vendor/'+str(session['id']))
+        if login_status['status']:
+            session['id'] = login_status['user']['id']
+            return redirect('/users/show/'+str(session['id']))
+        else:
+            for error in login_status['errors']:
+                flash(error)
+            return redirect('/')
 
 
     def create(self):
         requestform = request.form
         create_status = self.models['User'].add_user(requestform)
-        session['id'] = create_status['user']['id'] 
-        return redirect('/users/vendor/'+str(session['id']))
+        print create_status
+        if create_status['status']:
+            session['id'] = create_status['user']['id']
+            return redirect('/users/show/'+str(session['id']))
+        else:
+            for error in create_status['errors']:
+                flash(error)
+            return redirect('/')
 
     def update(self, u_id):
         update_status = self.models['User'].update_user(requestform)

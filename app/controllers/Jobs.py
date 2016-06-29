@@ -29,7 +29,7 @@ class Jobs(Controller):
 
     def create(self):
         # Process create job. Redirect
-        input_form = form.request
+        input_form = request.form
         create_status = self.model['Job'].create_job(input_form)
         if create_status['status']:
             return redirect('/jobs/show/' + create_status['job_id'])
@@ -38,7 +38,7 @@ class Jobs(Controller):
 
     def update(self, job_id):
         # Process update job. Redirect
-        input_form = form.request
+        input_form = request.form
         update_status = self.model['Job'].update_job(input_form, job_id)
         if update_status['status']:
             return redirect('/jobs/show/' + update_status['job_id'])

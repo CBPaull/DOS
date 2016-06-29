@@ -6,5 +6,17 @@
 </head>
 <body>
 <!--To be added, page showing all users.  -->
+{% if all_users: %}
+	<hr>
+	{% for user in all_users %}
+		<p>first name: {{ user['firstname']}}</p>
+		<p>last name: {{ user['lastname'] }}</p>
+		<p>phone: {{ user['phone'] }}</p>
+		<p>email: {{ user['email'] }}</p>
+		<p>member since: {{ user['created_at'] }}</p>
+		<hr>
+	{% endfor %}
+
+{% endif %}
 </body>
 </html>
