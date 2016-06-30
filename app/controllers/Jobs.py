@@ -108,14 +108,14 @@ class Jobs(Controller):
         requestform = request.form
         change_status = self.models['Bid'].change_bid_status(requestform)
         if change_status['status']:
-            return redirect('/jobs/show/' + str(create_status['job_id']))
+            return redirect('/jobs/show/' + str(change_status['job_id']))
         else:
-            return redirect('/jobs/show/' + str(create_status['job_id']))
+            return redirect('/jobs/show/' + str(change_status['job_id']))
 
     def removebid(self):
         requestform = request.form
         remove_status = self.models['Bid'].destroy_bid(requestform)
         if remove_status['status']:
-            return redirect('/jobs/show/' + str(create_status['job_id']))
+            return redirect('/jobs/show/' + str(remove_status['job_id']))
         else:
-            return redirect('/jobs/show/' + str(create_status['job_id']))
+            return redirect('/jobs/show/' + str(remove_status['job_id']))

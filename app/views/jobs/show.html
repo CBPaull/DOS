@@ -6,6 +6,7 @@
 				<h2><a href="/jobs/show/{{ job['job_id'] }}">{{ job['job_title']}}</a></h2>
 				<h3>{{ job['firstname']}} {{ job['lastname'] }}</h3>
 				ratings go here
+
 			</div>
 			<div class="col-md-5">
 				<p>Title: </p>
@@ -53,6 +54,7 @@
 					<td>Comment</td>
 					<td>User</td>
 					<td>Submitted at</td>
+					<td>Status</td>
 					<td>Actions</td>
 				</thead>
 				<tbody>
@@ -62,41 +64,63 @@
 						<td>{{ bid['comment'] }}</td>
 						<td>{{ bid['firstname'] }} {{ bid['lastname'] }}</td>
 						<td>{{ bid['created_at'] }}</td>
-						<td>
+						{% if bid['status']==2 %}
+						<td>Accepted</td>
+						{% elif bid['status']==1 %}
+						<td>Rejected</td>
+						{% else %}
+						<td>Pending</td>
+						{% endif %}
+						<td>	
+							{% if job['job_status'] == 'open' or job['job_status'] == 'closed' %}
+							{% if job['user_id'] == session['id'] %}
 							<form action="/jobs/changebidstatus" method="POST">
-								<input type="hidden" name="bid['id']">
+								<input type="hidden" name="id" value="{{ bid['id'] }}">
 								<input type="hidden" name="status" value="2">
 								<input type="hidden" name="user_id" value="{{ session['id'] }}">
-								<input type="hidden" name="job_id" value="{{ job['id'] }}">
+								<input type="hidden" name="job_id" value="{{ job['job_id'] }}">
 								<input type="submit" name="submit" value="Accept Bid">
 								<!-- color accept button green -->
 							</form>
 							<form action="/jobs/changebidstatus" method="POST">
-								<input type="hidden" name="bid['id']">
+								<input type="hidden" name="id" value="{{ bid['id'] }}">
 								<input type="hidden" name="status" value="1">
 								<input type="hidden" name="user_id" value="{{ session['id'] }}">
-								<input type="hidden" name="job_id" value="{{ job['id'] }}">
+								<input type="hidden" name="job_id" value="{{ job['job_id'] }}">
 								<input type="submit" name="submit" value="Reject Bid">
 								<!-- color accept button red -->
 							</form>
+							{% elif bid['user_id'] == session['id'] %}
+							<form action="/jobs/removebid" method="POST" onsubmit="return confirm('Are you sure you want to remove your bid')">
+								<input type="hidden" name="id" value="{{ bid['id'] }}">
+								<input type="hidden" name="job_id" value="{{ job['job_id'] }}">
+								<input type="submit" name="submit" value="Remove Bid">
+							</form>
+							{% else %}
+							{% endif %}
+							{% endif %}
+
 						</td>
 					</tr>
 					{% endfor %}
 						<!-- Update and submit forms go here -->
-					}
 					</tr>
 				</tbody>
 				<!-- Display current bids -->
 				<!-- Show form to users who did not create the job -->
+				{% if job['job_status'] == 'open' %}
+				{% if job['user_id'] != session['id'] %}
 				<form action="/jobs/makebid" method="POST">
 
 					<p>price: <input type="number" name="price"></p>
 					<p>comment: <input type="text" name="comment"></p>
 					<input type="hidden" name="status" value="0">
 					<input type="hidden" name="user_id" value="{{ session['id'] }}">
-					<input type="hidden" name="job_id" value="{{ job['id'] }}">
+					<input type="hidden" name="job_id" value="{{ job['job_id'] }}">
 					<input type="submit" name="submit" value="Make Bid">
 				</form>
+				{% endif %}
+				{% endif %}
 			</div>
 		</div>
     </div> <!-- /container -->
