@@ -1,6 +1,5 @@
 from system.core.controller import *
 
-
 class Jobs(Controller):
     def __init__(self, action):
         super(Jobs, self).__init__(action)
@@ -30,23 +29,8 @@ class Jobs(Controller):
             address = str(job[0]['address1']) + ' '  + str(job[0]['city']) + ' '  + str(job[0]['zipcode'])
         
         latlong = self.models['Job'].job_location_latitude_longtitude(address)
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print latlong
+        
         bids = self.models['Bid'].show_job_bids(job_id)
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print bids
         return self.load_view('/jobs/show.html', job=job[0], latlong=latlong, bids=bids)
 
     def edit(self, job_id):
