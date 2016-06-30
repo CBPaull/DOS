@@ -2,11 +2,11 @@
 {% block content %}
 <!--To be added, page showing all users.  -->
 <div class="container">
-	<h2>Adding a new job review:</h2>
+	<h2>Adding a new contractor review:</h2>
 	<form action="/jobs/create_review" method="post">
 		<div class="input-group">
 			<input type="hidden" name="user_id" value="{{ session['id'] }}">
-			<input type="hidden" name="to_user_id" value="{{ job['user_id'] }}">
+			<input type="hidden" name="to_user_id" value="job['accepted_id']">
 			<input type="hidden" name="job_id" value="{{ job['job_id'] }}">
 			Job Title:
 			<p>{{ job['job_title'] }}</p>

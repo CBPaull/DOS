@@ -57,6 +57,8 @@ routes['POST']['/jobs/removebid'] = 'Jobs#removebid'
 
 #Job reviews
 routes['/jobs/add_review/<job_id>'] = 'Jobs#add_review'
+routes['/jobs/add_review_c/<job_id>'] = 'Jobs#add_review_c'
+
 #Process Job Review
 routes['POST']['/jobs/create_review'] = 'Jobs#create_review'
 

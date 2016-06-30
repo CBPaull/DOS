@@ -7,6 +7,7 @@ class Jobs(Controller):
         self.load_model('Job')
         self.load_model('User')
         self.load_model('Bid')
+        self.load_model('Review')
         self.db = self._app.db
 
     def joblist(self):
@@ -30,23 +31,9 @@ class Jobs(Controller):
             address = str(job[0]['address1']) + ' '  + str(job[0]['city']) + ' '  + str(job[0]['zipcode'])
         
         latlong = self.models['Job'].job_location_latitude_longtitude(address)
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print latlong
+        # print latlong
         bids = self.models['Bid'].show_job_bids(job_id)
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print 'haha'
-        print bids
+        # print bids
         return self.load_view('/jobs/show.html', job=job[0], latlong=latlong, bids=bids)
 
     def edit(self, job_id):
@@ -123,5 +110,17 @@ class Jobs(Controller):
     def add_review(self, job_id):
         # Displays a job review page.  Render.
         job = self.models['Job'].get_job_by_id(job_id)
+        print job[0]
         return self.load_view('/jobs/addreview.html', job=job[0])
-    
+
+    def add_review_c(self, job_id):
+        # Displays a job review page.  Render.
+        job = self.models['Job'].get_job_by_id(job_id)
+        print job[0]
+        return self.load_view('/jobs/addreview_c.html', job=job[0])
+
+    def create_review(self):
+        input_form = request.form
+        print "input form review", input_form
+        review_status = self.models['Review'].create_review(input_form)
+        return redirect('/users/show/'+str(session['id']))
