@@ -1,6 +1,19 @@
 * {
-  font-family: monaco;
+/*  font-family: monaco;*/
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.05em;
 }
+
+body {
+  min-height: 800px;
+  padding-top: 75px;
+}
+
+.container {
+    width: 90%;
+    padding: 1em;
+}
+
 .alignRight{
     padding-top: 1%;
 	padding-left: 18%;
@@ -38,4 +51,8 @@
 .profile_pic_img {
     width: 9em;
     height: auto;
+}
+
+.yellow {
+    color: #ffd11a;
 }

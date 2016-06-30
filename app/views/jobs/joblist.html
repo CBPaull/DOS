@@ -1,20 +1,22 @@
 {% extends "layout.html" %}
 {% block content %}
 <!--To be added, page showing all users.  -->
-<a href="/jobs/addnew"><button class="btn" type="button">Create a new Job!</button></a>
-<h2>Listing of All Jobs</h2>
-{% if all_jobs: %}
-	<hr>
-	{% for job in all_jobs %}
-		<p>Title: <a href="/jobs/show/{{ job['job_id'] }}">{{ job['job_title']}}</a></p>
-		<p>Description: {{ job['job_description'] }}</p>
-		<p>phone: {{ job['phone'] }}</p>
-		<p>email: {{ job['email'] }}</p>
-		<p>posted by: <a href="/users/show/{{ job['user_id'] }}">{{ job['firstname']}} {{ job['lastname'] }}</a></p>
-		<p>posted at: {{ job['posted_at'] }}</p>
-		<p>scheduled for: {{ job['job_time'] }}</p>
-		<p>address: {{ job['address1']}} {{ job['apartment']}} {{ job['city']}} {{ job['zipcode']}}</p> 
+<div class="container">
+	<a href="/jobs/addnew"><button class="btn" type="button">Create a new Job!</button></a>
+	<h2>Listing of All Jobs</h2>
+	{% if all_jobs: %}
 		<hr>
-	{% endfor %}
-{% endif %}
+		{% for job in all_jobs %}
+			<p>Title: <a href="/jobs/show/{{ job['job_id'] }}">{{ job['job_title']}}</a></p>
+			<p>Description: {{ job['job_description'] }}</p>
+			<p>phone: {{ job['phone'] }}</p>
+			<p>email: {{ job['email'] }}</p>
+			<p>posted by: <a href="/users/show/{{ job['user_id'] }}">{{ job['firstname']}} {{ job['lastname'] }}</a></p>
+			<p>posted at: {{ job['posted_at'] }}</p>
+			<p>scheduled for: {{ job['job_time'] }}</p>
+			<p>address: {{ job['address1']}} {{ job['apartment']}} {{ job['city']}} {{ job['state'] }} {{ job['zipcode']}}</p> 
+			<hr>
+		{% endfor %}
+	{% endif %}
+</div>
 {% endblock %}

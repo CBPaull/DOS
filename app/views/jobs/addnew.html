@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
 <!--To be added, page showing all users.  -->
-<h2>Creating a new Job:</h2>
+<div class="container">
+		<h2>Creating a new Job:</h2>
 		<form action="/jobs/add" method="post">
 			<div class="input-group">
 				<input type="hidden" name="user_id" value="{{ session['id'] }}">
@@ -26,4 +27,5 @@
 				<button class="btn" type="submit">Submit</button>
 			</div>
 		</form>
+</div>
 {% endblock %}
