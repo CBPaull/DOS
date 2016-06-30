@@ -35,7 +35,7 @@ CREATE TABLE `addresses` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -56,45 +56,7 @@ CREATE TABLE `bids` (
   `job_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id_idx` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `contractor_reviews`
---
-
-DROP TABLE IF EXISTS `contractor_reviews`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `contractor_reviews` (
-  `id` int(11) NOT NULL,
-  `overall` int(11) DEFAULT NULL,
-  `review` text,
-  `contractor_id` int(11) NOT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `contractors`
---
-
-DROP TABLE IF EXISTS `contractors`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `contractors` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(500) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`user_id`),
-  KEY `fk_Contractors_Users1_idx` (`user_id`),
-  CONSTRAINT `fk_Contractors_Users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +80,7 @@ CREATE TABLE `jobs` (
   PRIMARY KEY (`id`),
   KEY `user_id_idx` (`user_id`),
   CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +99,28 @@ CREATE TABLE `jobs_has_addresses` (
   KEY `fk_Jobs_has_Addresses_Jobs1_idx` (`job_id`),
   CONSTRAINT `fk_Jobs_has_Addresses_Addresses1` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Jobs_has_Addresses_Jobs1` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `reviews`
+--
+
+DROP TABLE IF EXISTS `reviews`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reviews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `overall` int(11) DEFAULT NULL,
+  `review` text,
+  `job_id` int(11) NOT NULL,
+  `created_at` varchar(45) DEFAULT NULL,
+  `updated_at` varchar(45) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `to_user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_vendor_reviews_users1_idx` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,12 +135,9 @@ CREATE TABLE `services` (
   `title` varchar(45) DEFAULT NULL,
   `description` varchar(500) DEFAULT NULL,
   `price` varchar(45) DEFAULT NULL,
-  `contractor_id` int(11) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_services_Contractors1_idx` (`contractor_id`),
-  CONSTRAINT `fk_services_Contractors1` FOREIGN KEY (`contractor_id`) REFERENCES `contractors` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -172,25 +152,6 @@ CREATE TABLE `skills` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `skill` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `skills_has_contractors`
---
-
-DROP TABLE IF EXISTS `skills_has_contractors`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `skills_has_contractors` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `skill_id` int(11) NOT NULL,
-  `contractor_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`skill_id`,`contractor_id`),
-  KEY `fk_skills_has_contractors_contractors1_idx` (`contractor_id`),
-  KEY `fk_skills_has_contractors_skills1_idx` (`skill_id`),
-  CONSTRAINT `fk_skills_has_contractors_contractors1` FOREIGN KEY (`contractor_id`) REFERENCES `contractors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_skills_has_contractors_skills1` FOREIGN KEY (`skill_id`) REFERENCES `skills` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -233,6 +194,21 @@ CREATE TABLE `skills_has_services` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `skills_has_users`
+--
+
+DROP TABLE IF EXISTS `skills_has_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `skills_has_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `skill_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `users`
 --
 
@@ -250,8 +226,9 @@ CREATE TABLE `users` (
   `updated_at` datetime DEFAULT NULL,
   `phone` varchar(45) DEFAULT NULL,
   `user_level` varchar(45) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,46 +247,7 @@ CREATE TABLE `users_has_addresses` (
   KEY `fk_Users_has_Addresses_Users_idx` (`user_id`),
   CONSTRAINT `fk_Users_has_Addresses_Addresses1` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Users_has_Addresses_Users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `vendor_reviews`
---
-
-DROP TABLE IF EXISTS `vendor_reviews`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `vendor_reviews` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `overall` int(11) DEFAULT NULL,
-  `review` text,
-  `job_id` int(11) NOT NULL,
-  `created_at` varchar(45) DEFAULT NULL,
-  `updated_at` varchar(45) DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_vendor_reviews_users1_idx` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `vendors`
---
-
-DROP TABLE IF EXISTS `vendors`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `vendors` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(500) DEFAULT NULL,
-  `created_at` varchar(45) DEFAULT NULL,
-  `updated_at` varchar(45) DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_Vendors_Users1_idx` (`user_id`),
-  CONSTRAINT `fk_Vendors_Users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -321,4 +259,4 @@ CREATE TABLE `vendors` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-29 15:34:16
+-- Dump completed on 2016-06-29 17:53:58
