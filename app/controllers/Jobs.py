@@ -1,6 +1,5 @@
 from system.core.controller import *
 
-
 class Jobs(Controller):
     def __init__(self, action):
         super(Jobs, self).__init__(action)
@@ -31,9 +30,7 @@ class Jobs(Controller):
             address = str(job[0]['address1']) + ' '  + str(job[0]['city']) + ' '  + str(job[0]['zipcode'])
         
         latlong = self.models['Job'].job_location_latitude_longtitude(address)
-        # print latlong
         bids = self.models['Bid'].show_job_bids(job_id)
-        # print bids
         return self.load_view('/jobs/show.html', job=job[0], latlong=latlong, bids=bids)
 
     def edit(self, job_id):
@@ -95,15 +92,15 @@ class Jobs(Controller):
         requestform = request.form
         change_status = self.models['Bid'].change_bid_status(requestform)
         if change_status['status']:
-            return redirect('/jobs/show/' + str(create_status['job_id']))
+            return redirect('/jobs/show/' + str(change_status['job_id']))
         else:
-            return redirect('/jobs/show/' + str(create_status['job_id']))
+            return redirect('/jobs/show/' + str(change_status['job_id']))
 
     def removebid(self):
         requestform = request.form
         remove_status = self.models['Bid'].destroy_bid(requestform)
         if remove_status['status']:
-            return redirect('/jobs/show/' + str(create_status['job_id']))
+            return redirect('/jobs/show/' + str(remove_status['job_id']))
         else:
             return redirect('/jobs/show/' + str(create_status['job_id']))
 
@@ -124,3 +121,4 @@ class Jobs(Controller):
         print "input form review", input_form
         review_status = self.models['Review'].create_review(input_form)
         return redirect('/users/show/'+str(session['id']))
+

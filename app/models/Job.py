@@ -27,7 +27,7 @@ class Job(Model):
         query = "SELECT jobs.id AS 'job_id', jobs.title AS 'job_title', jobs.description AS 'job_description', " \
                 "jobs.user_id, jobs.time AS 'job_time', jobs.created_at AS 'posted_at', users.firstname AS 'firstname', "\
                 "users.lastname AS 'lastname', users.email AS 'email', users.phone AS 'phone', addresses.address1, " \
-                "addresses.apartment, addresses.city, addresses.zipcode, jobs.status, addresses.state  " \
+                "addresses.apartment, addresses.city, addresses.zipcode, jobs.status AS job_status, addresses.state  " \
                 " FROM jobs " \
                 "JOIN users ON jobs.user_id = users.id  JOIN jobs_has_addresses ON jobs.id = jobs_has_addresses.job_id" \
                 " JOIN addresses ON jobs_has_addresses.address_id = addresses.id " \
