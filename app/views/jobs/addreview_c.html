@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<!--To be added, page showing all users.  -->
+<div class="container">
+	<h2>Adding a new contractor review:</h2>
+	<form action="/jobs/create_review" method="post">
+		<div class="input-group">
+			<input type="hidden" name="user_id" value="{{ session['id'] }}">
+			<input type="hidden" name="to_user_id" value="job['accepted_id']">
+			<input type="hidden" name="job_id" value="{{ job['job_id'] }}">
+			Job Title:
+			<p>{{ job['job_title'] }}</p>
+			Posted by:
+			<p>{{ job['firstname']}} {{ job['lastname'] }}</p>
+			Description:<br>
+			<p>{{ job['job_description'] }}</p>
+			Job Schedule Date
+			<p>{{ job['job_time'] }}</p>
+			address:
+			<p>{{ job['address1']}} {{ job['apartment']}}
+			<br>{{ job['city']}} {{ job['state'] }} {{ job['zipcode']}}</p> 
+			<div id="el"><ul class="c-rating"></ul>
+			<input type="hidden" id="hidden_stars" name="overall" value="0">
+			<textarea name="review_text" id="review_text" placeholder="write your review here."></textarea>
+			<button class="btn" type="submit">Submit Review</button>
+		</div>
+	</form>
+</div>
+<script src="/static/js/rating.min.js"></script>
+<script type="text/javascript">
+	// target element
+	var star_element = document.querySelector('.c-rating');
+	// current rating, or initial rating
+	var currentRating = 0;
+	// max rating, i.e. number of stars you want
+	var maxRating= 5;
+	// callback to run after setting the rating
+	var callback = function(rating) { 
+		$('#hidden_stars').val(rating.toString()); 
+		// alert(rating);
+	};
+	// rating instance
+	var myRating = rating(star_element, currentRating, maxRating, callback);
+</script>
+{% endblock %}

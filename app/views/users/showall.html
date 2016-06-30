@@ -1,16 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
 <!--To be added, page showing all users.  -->
+<div class="container">
 <h2>Listing of All Users</h2>
-{% if all_users: %}
-	<hr>
-	{% for user in all_users %}
-		<p>name: <a href="/users/show/{{ user['id'] }}">{{ user['firstname']}} {{ user['lastname'] }}</a></p>
-		<p>phone: {{ user['phone'] }}</p>
-		<p>email: {{ user['email'] }}</p>
-		<p>member since: {{ user['created_at'] }}</p>
-		<p>address: {{ user['address1']}} {{ user['apartment']}} {{ user['city']}} {{ user['zipcode']}}</p> 
+	{% if all_users: %}
 		<hr>
-	{% endfor %}
-{% endif %}
+		{% for user in all_users %}
+			<p>name: <a href="/users/show/{{ user['id'] }}">{{ user['firstname']}} {{ user['lastname'] }}</a></p>
+			<p>phone: {{ user['phone'] }}</p>
+			<p>email: {{ user['email'] }}</p>
+			<p>member since: {{ user['created_at'] }}</p>
+			<p>address: {{ user['address1']}} {{ user['apartment']}} {{ user['city']}} {{ user['zipcode']}}</p> 
+			<hr>
+		{% endfor %}
+	{% endif %}
+</div>
 {% endblock %}

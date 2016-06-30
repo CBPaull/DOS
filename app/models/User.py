@@ -113,6 +113,13 @@ class User(Model):
         elif info['password'] != info['confirmation']:
             errors.append('Password and confirmation must match!')
         # If we hit errors, return them, else return True.
+        emailquery = "SELECT * FROM users WHERE email = :email"
+        data = {
+        'email': info['email']
+        }
+        emails = self.db.query_db(emailquery, data)
+        if len(emails)>0:
+            errors.append('Email already in use')
         if errors:
             return {"status": False, "errors": errors}
         else:

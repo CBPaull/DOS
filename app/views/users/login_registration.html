@@ -1,118 +1,117 @@
 {% extends "layout.html" %}
 {% block content %}
-		<div class="container">
-			{% if not session['id'] %}
-			<div class="row">
-				<div class="col-md-6">
-					<form action="/users/create" method="post">
-						<fieldset class="well the-fieldset">
-					        <legend class="the-legend">Register</legend>
-							<table>
-								<tr>
-									<td>
-										<label>First name:</label>
-									</td>
-									<td>
-										<input type="text" name="firstname" placeholder="First name"><br>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label>Last name:</label>
-									</td>
-									<td>
-										<input type="text" name="lastname" placeholder="Last name"><br>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label>Email Address:</label>
-									</td>
-									<td>
-										<input type="email" name="email" placeholder="Email Address">
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label>Password:</label>
-									</td>
-									<td>
-										<input type="password" name="password"><br>
-										<span>*Password should be at least 8 characters</span>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label>Confirm PW:</label>
-									</td>
-									<td>
-										<input type="password" name="confirmation">
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label>Phone number</label>
-									</td>
-									<td>
-										<input type="number" name="phone" placeholder="Phone number" required>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label>Street:</label>
-									</td>
-									<td>
-										<input type="text" name="address1" placeholder="street"><br>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label>Aptartment #:</label>
-									</td>
-									<td>
-										<input type="text" name="apartment" placeholder="Apartment #"><br>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label>City:</label>
-									</td>
-									<td>
-										<input type="text" name="city" placeholder="City"><br>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label>State:</label>
-									</td>
-									<td>
-										<input type="text" name="state" placeholder="State"><br>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label>Zip code:</label>
-									</td>
-									<td>
-										<input type="number" name="zipcode" placeholder="Zipcode"><br>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<input type='hidden' name="user_level" value="0">
-										<input type="hidden" name="home" value="1">
-									</td>
-									<td class="alignRight">
-										<button type="submit" name="Sign In" class="btn btn-success">Register</button>
-									</td>
-									
-								</tr>
-							</table>
-					    </fieldset>
-					</form>
-					
-				</div>
+	<div class="container">
+		{% if not session['id'] %}
+		<div class="row">
+			<div class="col-md-6">
+				<form action="/users/create" method="post">
+					<fieldset class="well the-fieldset">
+				        <legend class="the-legend">Register</legend>
+						<table>
+							<tr>
+								<td>
+									<label>First name:</label>
+								</td>
+								<td>
+									<input type="text" name="firstname" placeholder="First name"><br>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Last name:</label>
+								</td>
+								<td>
+									<input type="text" name="lastname" placeholder="Last name"><br>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Email Address:</label>
+								</td>
+								<td>
+									<input type="email" name="email" placeholder="Email Address">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Password:</label>
+								</td>
+								<td>
+									<input type="password" name="password"><br>
+									<span>*Password should be at least 8 characters</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Confirm PW:</label>
+								</td>
+								<td>
+									<input type="password" name="confirmation">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Phone number</label>
+								</td>
+								<td>
+									<input type="number" name="phone" placeholder="Phone number" required>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Street:</label>
+								</td>
+								<td>
+									<input type="text" name="address1" placeholder="street"><br>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Aptartment #:</label>
+								</td>
+								<td>
+									<input type="text" name="apartment" placeholder="Apartment #"><br>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>City:</label>
+								</td>
+								<td>
+									<input type="text" name="city" placeholder="City"><br>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>State:</label>
+								</td>
+								<td>
+									<input type="text" name="state" placeholder="State"><br>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Zip code:</label>
+								</td>
+								<td>
+									<input type="number" name="zipcode" placeholder="Zipcode"><br>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type='hidden' name="user_level" value="0">
+									<input type="hidden" name="home" value="1">
+								</td>
+								<td class="alignRight">
+									<button type="submit" name="Sign In" class="btn btn-success">Register</button>
+								</td>
+								
+							</tr>
+						</table>
+				    </fieldset>
+				</form>
 				
+
 				<div class="col-md-6">
 					<form action="/users/login" method="post">
 						<fieldset class="well the-fieldset">
@@ -248,8 +247,43 @@
 					</form>
 				</div>
 			</div>
-			{% else %}
-			<h3 class="warning">You are already logged in!</h3>
-			{% endif %}
-	    </div> <!-- /container -->
+			
+			<div class="col-md-6">
+				<form action="/users/login" method="post">
+					<fieldset class="well the-fieldset">
+				        <legend class="the-legend">Login</legend>
+						<table>
+							<tr>
+								<td>
+									<label>Email Address:</label>
+								</td>
+								<td>
+									<input type="email" name="email" placeholder="Email address" required>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Password:</label>
+								</td>
+								<td>
+									<input type="password" name="password" required>
+								</td>
+							</tr>
+							<tr>
+								<td>
+								</td>
+								<td class="alignRightx">
+									<button type="submit" name="Sign In" class="btn btn-primary">Sign in</button>
+								</td>
+								
+							</tr>
+						</table>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		{% else %}
+		<h3 class="warning">You are already logged in!</h3>
+		{% endif %}
+    </div> <!-- /container -->
 {% endblock %}

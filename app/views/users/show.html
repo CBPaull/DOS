@@ -32,8 +32,24 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-				Current Jobs. (Vendor pages will show posted jobs)
-				Contractor pages will show their standing job offers
+				<div class="row">
+				<h3>Current Jobs</h3>
+				<h3>Job postings</h3>					
+				</div>
+				<div class="row">
+					<h3>Reviews</h3>
+					<hr>
+					{% for review in reviews %}
+						<p>from: <a href="/users/show/{{ review['user_id'] }}">{{ review['firstname'] }} {{ review['lastname']}}</a></p>
+						<p>job title: {{ review['title'] }}</p>
+						<p>ratings: 
+						{% for x in range(0, review['overall']): %}
+							<span class="glyphicon glyphicon-star yellow" aria-hidden="true"></span>
+							{% endfor %}</p>
+						<p>{{ review['review'] }}</p>
+						<hr>
+					{% endfor %}
+				</div>
 				</div>
 			</div>
 			<br>

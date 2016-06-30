@@ -5,6 +5,7 @@ class Users(Controller):
         super(Users, self).__init__(action)
         self.load_model('Job')
         self.load_model('User')
+        self.load_model('Review')
         self.db = self._app.db
 
     def index(self):
@@ -32,8 +33,10 @@ class Users(Controller):
 
     def show(self, user_id):
         user = self.models['User'].show_user(user_id)
+        reviews = self.models['Review'].get_reviews_for_id(user_id)
         print user
-        return self.load_view('/users/show.html', user=user[0])
+        print reviews
+        return self.load_view('/users/show.html', user=user[0], reviews=reviews)
 
     def edit(self, user_id):
         user = self.models['User'].show_user(user_id)

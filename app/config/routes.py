@@ -55,8 +55,13 @@ routes['POST']['/jobs/changebidstatus'] = 'Jobs#changebidstatus'
 # destroy bid
 routes['POST']['/jobs/removebid'] = 'Jobs#removebid'
 
+#Job reviews
+routes['/jobs/add_review/<job_id>'] = 'Jobs#add_review'
+routes['/jobs/add_review_c/<job_id>'] = 'Jobs#add_review_c'
 
-# add routes to create, edit, view, and destroy vendor reviews
+#Process Job Review
+routes['POST']['/jobs/create_review'] = 'Jobs#create_review'
+
 # add routes to create, edit, view, and destroy contractor reviews
 # Show all bids on job_id.  Render
 # routes['/bids/<job_id>'] 'Bids#show'
