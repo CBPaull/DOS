@@ -3,22 +3,119 @@
 <!--To be added, page showing all users.  -->
 <div class="container">
 	<a href="/jobs/addnew" class="pull-right"><button class="btn" type="button">Create a new Job!</button></a>
-	<h2 class="text-center">Listing of All Jobs</h2>
-	{% if all_jobs: %}
-		<div class="container2">
-		<hr>
-		{% for job in all_jobs %}
-			<p>Title: <a href="/jobs/show/{{ job['job_id'] }}">{{ job['job_title']}}</a></p>
-			<p>Description: {{ job['job_description'] }}</p>
-			<p>phone: {{ job['phone'] }}</p>
-			<p>email: {{ job['email'] }}</p>
-			<p>posted by: <a href="/users/show/{{ job['user_id'] }}">{{ job['firstname']}} {{ job['lastname'] }}</a></p>
-			<p>posted at: {{ job['posted_at'] }}</p>
-			<p>scheduled for: {{ job['job_time'] }}</p>
-			<p>address: {{ job['address1']}} {{ job['apartment']}} {{ job['city']}} {{ job['state'] }} {{ job['zipcode']}}</p> 
+	<div class="col-md-6" id="list_all_job">
+		<h2 class="text-center">Listing of All Jobs</h2>
+		{% if all_jobs: %}
+			<div class="container2">
 			<hr>
-		{% endfor %}
-		</div>
-	{% endif %}
+			{% for job in all_jobs %}
+				<p>Title: <a href="/jobs/show/{{ job['job_id'] }}">{{ job['job_title']}}</a></p>
+				<p>Description: {{ job['job_description'] }}</p>
+				<p>phone: {{ job['phone'] }}</p>
+				<p>email: {{ job['email'] }}</p>
+				<p>posted by: <a href="/users/show/{{ job['user_id'] }}">{{ job['firstname']}} {{ job['lastname'] }}</a></p>
+				<p>posted at: {{ job['posted_at'] }}</p>
+				<p>scheduled for: {{ job['job_time'] }}</p>
+				<p>address: {{ job['address1']}} {{ job['apartment']}} {{ job['city']}} {{ job['state'] }} {{ job['zipcode']}}</p> 
+				<hr>
+			{% endfor %}
+			</div>
+		{% endif %}
+		<input type="hidden" id="temp" value="{{temp}}">
+	</div>
+	<div class="col-md-6" id="map">
+		<script>
+		var value = $('#temp').val();
+		
+		 var temp = JSON.parse(value);
+		 // alert(temp.length);
+		 console.log(temp);
+			function initMap() {
+				var myLatLng = {lat: {{signed_in_user_address['latitude']}}, lng: {{signed_in_user_address['longitude']}}};
+
+				var map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 15,
+				center: myLatLng
+				});
+
+
+
+
+				var marker = new google.maps.Marker({
+					position: myLatLng,
+					map: map,
+					title: 'Maps'
+				});
+
+				google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
+					return function() {
+						infowindow.setContent('Curret location');
+						infowindow.open(map, marker);
+					}
+				})(marker));
+
+				google.maps.event.addListener(marker, 'mouseout', (function(marker, i) {
+					return function() {
+						infowindow.close(map, marker);
+					}
+				})(marker));
+
+				// Add circle overlay and bind to marker
+				var circle = new google.maps.Circle({
+				  map: map,
+				  radius: 16093,    // 10 miles in metres
+				  fillColor: '#AA0000'
+				});
+				circle.bindTo('center', marker, 'position');
+
+
+				// var locations = [
+				// 	// {%for job in all_jobs%}
+				// 	// 	["{{job['job_title']}}","{{job['latitude']}}","{{job['longitude']}}","/jobs/show/{{job['job_id']}}'"],
+				// 	// {%endfor%}
+			 //      ['haha', 38.32, -76.53, 'http://www.google.com/'],
+			 //      ['yo', 38.34, -76.51, 'http://www.google.com/']
+			 //    ];
+			    var infowindow = new google.maps.InfoWindow();
+
+			    var marker, i;
+
+			    for (i = 0; i < temp.length; i++) {  
+					marker = new google.maps.Marker({
+						position: new google.maps.LatLng(temp[i]['latitude'], temp[i]['longitude']),
+						map: map
+					});
+
+					google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
+						return function() {
+						infowindow.setContent(temp[i]['job_title']);
+						infowindow.open(map, marker);
+						}
+					})(marker, i));
+
+					google.maps.event.addListener(marker, 'mouseout', (function(marker, i) {
+						return function() {
+							infowindow.close(map, marker);
+						}
+					})(marker, i));
+
+					google.maps.event.addListener(marker, 'click', (function(marker, i) {
+						return function() {
+							window.location.href = '/jobs/show/'+temp[i]['job_id'];
+							infowindow.setContent(temp[i]['job_title']);
+							infowindow.open(map, marker);
+						}
+					})(marker, i));
+			    }
+
+
+			}
+		</script>
+		<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqgY1E9_hEZftP5UgRlloVEiFaoz9iUNc&callback=initMap">
+		</script>
+	</div>
+	</div>
+	
 </div>
 {% endblock %}
