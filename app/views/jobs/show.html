@@ -3,13 +3,18 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-2">
-				<h2><a href="/jobs/show/{{ job['job_id'] }}">{{ job['job_title']}}</a></h2>
+				<h2>{{ job['job_title']}}</h2>
 				<h3>{{ job['firstname']}} {{ job['lastname'] }}</h3>
-				ratings go here
-
+				{% if (job['user_id'] == session['id']) %}
+					{% if job['job_status'] == 'closed'  %}
+					<form action="/jobs/update_status/{{job['job_id']}}" method="post">
+						<button>Completed</button>
+					</form>
+					{% endif %}
+				{% endif %}
 			</div>
 			<div class="col-md-5">
-				<p>Title: </p>
+				<p>Status: {{ job['job_status'] }}</p>
 				<p>Description: {{ job['job_description'] }}</p>
 				<p>Price:  {{ job['price'] }}</p>
 				<p>phone: {{ job['phone'] }}</p>
