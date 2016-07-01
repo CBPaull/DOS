@@ -29,14 +29,26 @@ class Users(Controller):
         user = self.models['User'].show_user(u_id)
         address = self.models['User'].show_addressesf
         jobs = self.models['Job'].get_jobs_by_userid(u_id)
-        return self.load_view('/users/dashboard_employer.html', user=user, address=address, jobs=jobs)
+        return self.load_view('/users/dashboard_employer.html',
+                              user=user,
+                              address=address,
+                              jobs=jobs)
 
     def show(self, user_id):
         user = self.models['User'].show_user(user_id)
         reviews = self.models['Review'].get_reviews_for_id(user_id)
+        jobs_posts = self.models['Job'].get_jobs_by_userid(user_id)
+        job_services = self.models['Job'].get_job_by_accepted_id(user_id)
         print user
         print reviews
-        return self.load_view('/users/show.html', user=user[0], reviews=reviews)
+        print job_services
+        print jobs_posts
+        return self.load_view('/users/show.html',
+                              user=user[0],
+                              reviews=reviews,
+                              jobs_posts=jobs_posts,
+                              job_services=job_services)
+
 
     def edit(self, user_id):
         user = self.models['User'].show_user(user_id)
@@ -53,8 +65,29 @@ class Users(Controller):
                 flash(error)
             return redirect('/')
 
+    def fblogin(self, email, firstname, lastname):
+        login_info = {
+            'email': email,
+            'firstname': firstname,
+            'lastname': lastname
+        }
+        print 'HAHAHAHAHAHA'
+        print login_info
+        login_status = self.models['User'].fb_login(login_info)
+        if login_status['status']:
+            session['id'] = login_status['user']['id']
+            session['facebook'] = True
+            if login_status['user']['phone']:
+                return redirect('/users/show/'+str(session['id']))
+            else:
+                return redirect('/users/edit/'+str(session['id']))
+        else:
+            for error in login_status['errors']:
+                flash(error)
+            return redirect('/')
     def logout(self):
         session.clear()
+
         return redirect('/')
 
     def create(self):
@@ -69,16 +102,33 @@ class Users(Controller):
                 flash(error)
             return redirect('/')
 
-    def update(self, u_id):
-        update_status = self.models['User'].update_user(requestform)
-        return redirect('/users/vendor/'+str(session['id']))
-        # POST pass requestform to model update
-
-    def update_address(self, u_id):
+    def update(self, user_id):
         requestform = request.form
-        update_status = self.models['User'].insert_address(requestform, u_id)
-        session['id'] = update_status['user']['id']
-        return redirect('/users/vendor/'+str(session['id']))
+        update_status = self.models['User'].update_user(requestform)
+        print update_status
+        if update_status['status']:
+            if update_status['user']['address1'] and update_status['user']['phone']:
+                return redirect('/users/edit/'+str(session['id']))
+            else:
+                return redirect('/users/show/'+str(session['id']))
+            # POST pass requestform to model update
+        else:
+            for error in update_status['errors']:
+                flash(error)
+            return redirect("/users/edit/'+str(session['id']")
+
+
+    def update_address(self, user_id):
+        requestform = request.form
+        print user_id
+        update_status = self.models['User'].insert_address(requestform, user_id)
+       
+        print update_status
+        session['id'] = update_status['user']['user_id']
+        if update_status['user']['address1'] and update_status['user']['phone']:
+            return redirect('/users/edit/'+str(session['id']))
+        else:
+            return redirect('/users/show/'+str(session['id']))
         #Insert new address, addresses can be added or deleted.
         # #Delete removes foreign key assignment
 
@@ -90,6 +140,6 @@ class Users(Controller):
     def destroyaddress(self):
         requestform = request.form
         self.models['User'].delete_address(requestform)
-        return redirect('/users/vendor/'+str(session['id']))
+        return redirect('/users/show/'+str(session['id']))
 
 

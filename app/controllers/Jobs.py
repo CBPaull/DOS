@@ -32,7 +32,7 @@ class Jobs(Controller):
     def show(self, job_id):
         # Show job by job_id. Render
         job = self.models['Job'].get_job_by_id(job_id)
-        
+
         if len(job[0]['apartment']) != 0:
             address = str(job[0]['address1']) + ' ' + str(job[0]['apartment']) + ' '  + str(job[0]['city']) + ' '  + str(job[0]['zipcode'])
         else:
@@ -75,8 +75,12 @@ class Jobs(Controller):
             return redirect('/jobs/edit/' + str(update_status['job_id']))
 
     def confirm(self, job_id):
-        # Process job status to 'closed'. Redirect
-        self.models['Job'].job_change_status(job_id, 1)
+        # Process job status to 'completed'. Redirect
+        self.models['Job'].job_change_status(job_id, 2)
+        # sending email out to job posters and contractors
+        # users = self.models['Job'].get_users_from_job(job_id)
+        # job = self.models['Job'].get_job_by_id(job_id)
+        # self.models['Email'].send_review_emails(users, job)
         return redirect('/jobs/show/' + str(job_id))
 
     def destroy(self, job_id):
@@ -115,6 +119,7 @@ class Jobs(Controller):
 
     def add_review(self, job_id):
         # Displays a job review page.  Render.
+        #
         job = self.models['Job'].get_job_by_id(job_id)
         print job[0]
         return self.load_view('/jobs/addreview.html', job=job[0])
@@ -130,4 +135,3 @@ class Jobs(Controller):
         print "input form review", input_form
         review_status = self.models['Review'].create_review(input_form)
         return redirect('/users/show/'+str(session['id']))
-

@@ -19,14 +19,17 @@ class User(Model):
         info = {
             'user_id': user_id
         }
+        print info
         query = "SELECT users.id, users.firstname, users.lastname, users.created_at AS created_at, users.updated_at AS updated_at, " \
                 "users.email, users.phone, users.servicename, users.user_level, " \
                 "addresses.address1, addresses.apartment, addresses.city, addresses.zipcode, addresses.state  " \
                 "FROM users " \
-                "JOIN users_has_addresses ON users.id = users_has_addresses.user_id " \
-                "JOIN addresses ON users_has_addresses.address_id = addresses.id " \
+                "LEFT JOIN users_has_addresses ON users.id = users_has_addresses.user_id " \
+                "LEFT JOIN addresses ON users_has_addresses.address_id = addresses.id " \
                 "WHERE users.id = :user_id;"
         user = self.db.query_db(query, info)
+        print 'blah'
+        print user
         return user
 
     def show_vendor(self, user_id):
@@ -51,6 +54,30 @@ class User(Model):
         address = self.db.query_db(query, info)
         return address
 
+    def fb_login(self, login_info):
+        info = {
+            'email': login_info['email'],
+            'firstname': login_info['firstname'],
+            'lastname': login_info['lastname'],
+            'user_level': 0
+        }
+        print info
+        errors = []
+        user_query = "SELECT * FROM users WHERE email = :email LIMIT 1"
+        user_data = {'email': info['email']}
+        user = self.db.query_db(user_query, user_data)
+        if user:
+            return { "status": True, "user": user[0]}
+        else:    
+            insert_query = "INSERT INTO users (firstname, lastname, email, user_level, created_at, updated_at) " \
+                   "VALUES (:firstname, :lastname, :email, :user_level, NOW(), NOW())"
+            data = { 'firstname': info['firstname'], 'lastname': info['lastname'], 'email': info['email'], 'user_level': info['user_level'] }
+            self.db.query_db(insert_query, data)
+            get_user_query = "SELECT * FROM users ORDER BY id DESC LIMIT 1"
+            users = self.db.query_db(get_user_query)
+            print "HAHAHAHAHAHAHAHAHAAAAAAAAAA"
+            print users
+            return { "status": True, "user": users[0]}
 
     def login_user(self, requestform):
         info = {
@@ -163,17 +190,12 @@ class User(Model):
         info = {
             'firstname': requestform['firstname'],
             'lastname': requestform['lastname'],
-            'email': requestform['email'],
             'phone': requestform['phone'],
             'servicename': requestform['servicename'],
             'user_level': requestform['user_level'],
-            'password': requestform['password'],
-            'confirmation': requestform['confirmation'],
             'id': requestform['id']
         }
-        EMAIL_REGEX = re.compile(r'^[a-za-z0-9\.\+_-]+@[a-za-z0-9\._-]+\.[a-za-z]*$')
         USER_REGEX = re.compile(r'^[a-zA-Z]+$')
-        PASS_REGEX = re.compile(r'\d.*[A-Z]|[A-Z].*\d')
         errors = []
         if not info['firstname']:
             errors.append('First name cannot be blank')
@@ -187,30 +209,15 @@ class User(Model):
             errors.append('Last name must be at least 2 characters long')
         elif not USER_REGEX.match(info['firstname']):
             errors.append('first name can contain only letters')
-        if not info['email']:
-            errors.append('Email cannot be blank')
-        elif not EMAIL_REGEX.match(info['email']):
-            errors.append('Email format must be valid!')
-        if not info['password']:
-            errors.append('Password cannot be blank')
-        elif len(info['password']) < 8:
-            errors.append('Password must be at least 8 characters long')
-        elif not PASS_REGEX.match(info['password']):
-            errors.append('Password must contain an uppercase letter and a number')
-        elif info['password'] != info['confirmation']:
-            errors.append('Password and confirmation must match!')
         if errors:
             return {"status": False, "errors": errors, "user_id": info['id']}
         else:
-            query = "UPDATE users SET firstname=:firstname, lastname=:lastname, email=:email, phone=:phone, servicename=:servicename, user_level=:user_level, updated_at=NOW() WHERE id=:id"
+            query = "UPDATE users SET firstname=:firstname, lastname=:lastname, phone=:phone, servicename=:servicename, user_level=:user_level, updated_at=NOW() WHERE id=:id"
             self.db.query_db(query, info)
-            pw_hash = self.bcrypt.generate_password_hash(info['password'])
-            pwinfo = {
-                'pw_hash': pw_hash
-            }
-            pwquery = "UPDATE users SET pw_hash= :pw_hash WHERE id=:id"
-            self.db.query_db(pwquery, pwinfo)
-            return {"status": True, "id": info['id']}
+            query = "SELECT users.phone AS phone, addresses.address1 AS address1, users.id AS user_id FROM users LEFT JOIN users_has_addresses ON users.id = users_has_addresses.user_id LEFT JOIN addresses ON users_has_addresses.address_id = addresses.id WHERE users.id = :user_id;"
+        u_id = { 'user_id': info['id']}
+        user = self.db.query_db(query, u_id)
+        return {"status": True, "user": user[0]}
 
     def insert_address(self, requestform, user_id):
         address = {
@@ -221,15 +228,18 @@ class User(Model):
             'state': requestform['state'],
             'home': requestform['home']
         }
-        address_query = "INSERT INTO addresses (address1, city, zipcode, apartment, state, home, updated_at) VALUES (:address1, :city, :zipcode, :apartment, :state, :home, NOW()) ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)"
+        address_query = "INSERT INTO addresses (address1, city, zipcode, apartment, state, home, updated_at) VALUES (:address1, :city, :zipcode, :apartment, :state, :home, NOW())"
         address_data = {'address1': address['address1'], 'city': address['city'], 'zipcode': address['zipcode'], 'apartment': address['apartment'], 'state': address['state'], 'home': address['home'] }
         self.db.query_db(address_query, address_data)
         get_address_query = "SELECT * FROM addresses ORDER BY id DESC LIMIT 1"
         user_address = self.db.query_db(get_address_query)
-        link_query = "INSERT INTO users_has_addresses (user_id, address_id) VALUES ( :user_id, LAST_INSERT_ID(id))"
+        link_query = "INSERT INTO users_has_addresses (user_id, address_id) VALUES ( :user_id, :address_id)"
         link_data = {'user_id': user_id, 'address_id': user_address[0]['id']}
         self.db.query_db(link_query, link_data)
-        return {"status": True, "user_id": user_id}
+        query = "SELECT users.phone AS phone, addresses.address1 AS address1, users.id AS user_id FROM users LEFT JOIN users_has_addresses ON users.id = users_has_addresses.user_id LEFT JOIN addresses ON users_has_addresses.address_id = addresses.id WHERE users.id = :user_id;"
+        u_id = { 'user_id': user_id}
+        user = self.db.query_db(query, u_id)
+        return {"status": True, "user": user[0]}
 
     def delete_user(self, requestform):
         info = {

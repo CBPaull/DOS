@@ -2,12 +2,17 @@ from system.core.router import routes
 
 # Default Welcome Page.  Render
 routes['default_controller'] = 'Users'
+# About Page
+routes['/about'] = 'Web#about'
+# Contact Page
+routes['/contact'] = 'Web#contact'
 # Login Registration Page. Render
 routes['/users/logreg'] = 'Users#index'
 # Show all users. Render
 routes['/users/showall'] =  'Users#showall'
 # Show User page. Render
 routes['/users/show/<user_id>'] = 'Users#show'
+routes['/facebook_success/<email>/<firstname>/<lastname>'] = 'Users#fblogin'
 # Edit User page. Render
 routes['/users/edit/<user_id>'] = 'Users#edit'
 # Show Vendor page. Render
@@ -29,7 +34,7 @@ routes['POST']['/users/create']='Users#create'
 # Process Login user.
 routes['POST']['/users/login']='Users#login'
 # Process logout user.
-routes['POST']['/users/logout']='Users#logout'
+routes['/users/logout']='Users#logout'
 # Process Update user.
 routes['POST']['/users/update/<user_id>'] = 'Users#update'
 # Process Update user address

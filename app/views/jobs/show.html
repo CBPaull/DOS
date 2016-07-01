@@ -3,14 +3,20 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-2">
-				<h2><a href="/jobs/show/{{ job['job_id'] }}">{{ job['job_title']}}</a></h2>
+				<h2>{{ job['job_title']}}</h2>
 				<h3>{{ job['firstname']}} {{ job['lastname'] }}</h3>
-				ratings go here
-
+				{% if (job['user_id'] == session['id']) %}
+					{% if job['job_status'] == 'closed'  %}
+					<form action="/jobs/update_status/{{job['job_id']}}" method="post">
+						<button>Completed</button>
+					</form>
+					{% endif %}
+				{% endif %}
 			</div>
 			<div class="col-md-5">
-				<p>Title: </p>
+				<p>Status: {{ job['job_status'] }}</p>
 				<p>Description: {{ job['job_description'] }}</p>
+				<p>Price:  {{ job['price'] }}</p>
 				<p>phone: {{ job['phone'] }}</p>
 				<p>email: {{ job['email'] }}</p>
 				<p>posted by: <a href="/users/show/{{ job['user_id'] }}">{{ job['firstname']}} {{ job['lastname'] }}</a></p>
@@ -73,12 +79,13 @@
 						<td>Pending</td>
 						{% endif %}
 						<td>	
-							{% if job['job_status'] == 'open' or job['job_status'] == 'closed' %}
+							{% if job['job_status'] == 'open' %}
 							{% if job['user_id'] == session['id'] %}
 							<form action="/jobs/changebidstatus" method="POST">
 								<input type="hidden" name="id" value="{{ bid['id'] }}">
 								<input type="hidden" name="status" value="2">
 								<input type="hidden" name="user_id" value="{{ session['id'] }}">
+								<input type="hidden" name="accepted_id" value ="{{ bid['user_id'] }}">
 								<input type="hidden" name="job_id" value="{{ job['job_id'] }}">
 								<input type="submit" name="submit" value="Accept Bid">
 								<!-- color accept button green -->
@@ -87,6 +94,7 @@
 								<input type="hidden" name="id" value="{{ bid['id'] }}">
 								<input type="hidden" name="status" value="1">
 								<input type="hidden" name="user_id" value="{{ session['id'] }}">
+								<input type="hidden" name="accepted_id" value ="{{ bid['user_id'] }}">
 								<input type="hidden" name="job_id" value="{{ job['job_id'] }}">
 								<input type="submit" name="submit" value="Reject Bid">
 								<!-- color accept button red -->

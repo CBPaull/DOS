@@ -1,6 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
-<!--To be added, page showing all users.  -->
+{% if session['facebook'] %}
+{% if user['address1'] and user['phone'] %}
+</br>
+<h4>  Thank you for filling out your information, <a href="/users/show/{{ user['id'] }}"> Click here to return to your main page</a> </h4>
+{% else %}
+</br>
+<h4>  to fully utilize this website, please input your address and phone number </h4>
+{% endif %}
+{% endif %}
 <div class="container">
 	<h2>Editing user: {{ user['firstname']}} {{ user['lastname'] }}</h2>
 	<form action="/users/update/{{ user['id'] }}" method="post">
@@ -11,8 +19,10 @@
 			<input type="text" name="lastname" value="{{ user['lastname'] }}"><br>
 			Phone
 			<input type="phone" name="phone" value="{{ user['phone'] }}"><br>
-			email
-			<input type="email" name="email" value="{{ user['email'] }}"><br>
+			Service Name
+			<input type="text" name="servicename" value="{{ user['servicename'] }}"><br>
+			<input type="hidden" name="user_level" value="{{user['user_level']}}">
+			<input type="hidden" name="id" value="{{ user['id'] }}">
 			<button class="btn" type="submit">Submit</button>
 		</div>
 	</form>
@@ -25,9 +35,10 @@
 		City:
 		<input type="text" name="city" value="{{ user['city']}}"><br>
 		State:
-		<input type="text" name="state" placeholder="State"><br>
+		<input type="text" name="state" value="{{ user['state'] }}"><br>
 		Zipcode:
 		<input type="text" name="zipcode" value="{{ user['zipcode']}}"><br>
+		<input type="hidden" name="home" value="0">
 		<button class="btn" type="submit">Submit</button>
 	</form>
 </div>
