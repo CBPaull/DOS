@@ -13,7 +13,16 @@ class Jobs(Controller):
         # ['/jobs/joblist']
         # Show wall of jobs. Render
         all_jobs = self.models['Job'].get_all_jobs()
-        print all_jobs
+        for info in all_jobs:
+            if len(info['apartment']) != 0:
+                address = str(info['address1']) + ' ' + str(info['apartment']) + ' '  + str(info['city']) + ' '  + str(info['zipcode'])
+            else:
+                address = str(info['address1']) + ' '  + str(info['city']) + ' '  + str(info['zipcode'])
+            
+            latlong = self.models['Job'].job_location_latitude_longtitude(address)
+            
+            info['latitude'] = latlong['latitude']
+            info['longitude'] = latlong['longitude']
         return self.load_view('jobs/joblist.html', all_jobs=all_jobs)
 
     def addnew(self):

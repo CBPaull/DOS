@@ -18,6 +18,7 @@ class Job(Model):
                 " JOIN addresses ON jobs_has_addresses.address_id = addresses.id " \
                 "ORDER BY jobs.created_at DESC; "
         all_jobs = self.db.query_db(query)
+        
         return all_jobs
 
     def get_job_by_id(self, job_id):
