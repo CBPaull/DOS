@@ -8,6 +8,7 @@ routes['/users/logreg'] = 'Users#index'
 routes['/users/showall'] =  'Users#showall'
 # Show User page. Render
 routes['/users/show/<user_id>'] = 'Users#show'
+routes['/facebook_success/<email>/<firstname>/<lastname>'] = 'Users#fblogin'
 # Edit User page. Render
 routes['/users/edit/<user_id>'] = 'Users#edit'
 # Show Vendor page. Render
@@ -29,7 +30,7 @@ routes['POST']['/users/create']='Users#create'
 # Process Login user.
 routes['POST']['/users/login']='Users#login'
 # Process logout user.
-routes['POST']['/users/logout']='Users#logout'
+routes['/users/logout']='Users#logout'
 # Process Update user.
 routes['POST']['/users/update/<user_id>'] = 'Users#update'
 # Process Update user address

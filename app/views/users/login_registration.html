@@ -107,41 +107,43 @@
 								</td>
 								
 							</tr>
+
 						</table>
 				    </fieldset>
 				</form>
-				
+			</div>
 
-				<div class="col-md-6">
-					<form action="/users/login" method="post">
-						<fieldset class="well the-fieldset">
-					        <legend class="the-legend">Login</legend>
-							<table>
-								<tr>
-									<td>
-										<label>Email Address:</label>
-									</td>
-									<td>
-										<input type="email" name="email" placeholder="Email address" required>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<label>Password:</label>
-									</td>
-									<td>
-										<input type="password" name="password" required>
-									</td>
-								</tr>
-								<tr>
-									<td>
-									</td>
-									<td class="alignRightx">
-										<button type="submit" name="Sign In" class="btn btn-primary">Sign in</button>
-									</td>
-									
-								</tr>
-								<tr>
+			
+			<div class="col-md-6">
+				<form action="/users/login" method="post">
+					<fieldset class="well the-fieldset">
+				        <legend class="the-legend">Login</legend>
+						<table>
+							<tr>
+								<td>
+									<label>Email Address:</label>
+								</td>
+								<td>
+									<input type="email" name="email" placeholder="Email address" required>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Password:</label>
+								</td>
+								<td>
+									<input type="password" name="password" required>
+								</td>
+							</tr>
+							<tr>
+								<td>
+								</td>
+								<td class="alignRightx">
+									<button type="submit" name="Sign In" class="btn btn-primary">Sign in</button>
+								</td>
+								
+							</tr>
+							<tr>
 									<td>
 									</td>
 									<td class="">
@@ -223,7 +225,7 @@
 										      console.log('Successful login for: ' + response);
 										      document.getElementById('status').innerHTML =
 										        'Thanks for logging in, ' + response.email + '!';
-										        // window.location = "/facebook_success/" + response.email+ "/" + response.first_name + "/" + response.last_name
+										      window.location = "/facebook_success/" + response.email+ "/" + response.first_name + "/" + response.last_name
 										    });
 										  }
 										</script>
@@ -234,7 +236,7 @@
 										  the FB.login() function when clicked.
 										-->
 
-										<fb:login-button scope="public_profile,email" onlogin="checkLoginState();" class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true">
+										<fb:login-button scope="public_profile,email" onlogin="checkLoginState();" class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="false">
 										</fb:login-button>
 										<!-- <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true"></div> -->
 										<div id="status"></div>
@@ -242,41 +244,6 @@
 									</td>
 									
 								</tr>
-							</table>
-						</fieldset>
-					</form>
-				</div>
-			</div>
-			
-			<div class="col-md-6">
-				<form action="/users/login" method="post">
-					<fieldset class="well the-fieldset">
-				        <legend class="the-legend">Login</legend>
-						<table>
-							<tr>
-								<td>
-									<label>Email Address:</label>
-								</td>
-								<td>
-									<input type="email" name="email" placeholder="Email address" required>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label>Password:</label>
-								</td>
-								<td>
-									<input type="password" name="password" required>
-								</td>
-							</tr>
-							<tr>
-								<td>
-								</td>
-								<td class="alignRightx">
-									<button type="submit" name="Sign In" class="btn btn-primary">Sign in</button>
-								</td>
-								
-							</tr>
 						</table>
 					</fieldset>
 				</form>
