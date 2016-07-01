@@ -11,6 +11,7 @@
 			<div class="col-md-5">
 				<p>Title: </p>
 				<p>Description: {{ job['job_description'] }}</p>
+				<p>Price:  {{ job['price'] }}</p>
 				<p>phone: {{ job['phone'] }}</p>
 				<p>email: {{ job['email'] }}</p>
 				<p>posted by: <a href="/users/show/{{ job['user_id'] }}">{{ job['firstname']}} {{ job['lastname'] }}</a></p>

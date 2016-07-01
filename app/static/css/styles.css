@@ -12,6 +12,12 @@ body {
 .container {
     width: 90%;
     padding: 1em;
+    margin: auto;
+}
+
+.container2 {
+    width: 60%;
+    margin: auto;
 }
 
 .alignRight{
