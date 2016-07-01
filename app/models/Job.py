@@ -20,6 +20,7 @@ class Job(Model):
                 "WHERE jobs.status = 'open' " \
                 "ORDER BY jobs.created_at DESC; "
         all_jobs = self.db.query_db(query)
+        
         return all_jobs
 
     def get_job_by_id(self, job_id):

@@ -1,5 +1,5 @@
 from system.core.controller import *
-
+from flask import json
 class Jobs(Controller):
     def __init__(self, action):
         super(Jobs, self).__init__(action)
@@ -13,8 +13,32 @@ class Jobs(Controller):
         # ['/jobs/joblist']
         # Show wall of jobs. Render
         all_jobs = self.models['Job'].get_all_jobs()
-        print all_jobs
-        return self.load_view('jobs/joblist.html', all_jobs=all_jobs)
+        # print json.dumps(all_jobs)
+        for info in all_jobs:
+            if len(info['apartment']) != 0:
+                address = str(info['address1']) + ' ' + str(info['apartment']) + ' '  + str(info['city']) + ' '  + str(info['zipcode'])
+            else:
+                address = str(info['address1']) + ' '  + str(info['city']) + ' '  + str(info['zipcode'])
+            
+            latlong = self.models['Job'].job_location_latitude_longtitude(address)
+            
+            info['latitude'] = latlong['latitude']
+            info['longitude'] = latlong['longitude']
+       
+        user_address = self.models['User'].show_addresses(session['id'])
+        
+        for signed_in_user_address in user_address:
+            if len(signed_in_user_address['apartment']) != 0:
+                signed_in_address = str(signed_in_user_address['address1']) + ' ' + str(signed_in_user_address['apartment']) + ' '  + str(signed_in_user_address['city']) + ' '  + str(signed_in_user_address['zipcode'])
+            else:
+                signed_in_address = str(signed_in_user_address['address1']) + ' '  + str(signed_in_user_address['city']) + ' '  + str(signed_in_user_address['zipcode'])
+            
+            latlong = self.models['Job'].job_location_latitude_longtitude(address)
+            
+            signed_in_user_address['latitude'] = latlong['latitude']
+            signed_in_user_address['longitude'] = latlong['longitude']
+
+        return self.load_view('jobs/joblist.html', all_jobs=all_jobs, signed_in_user_address=signed_in_user_address, user_address=user_address, temp=json.dumps(all_jobs))
 
     def addnew(self):
         # Page for adding new job. Render.
@@ -30,7 +54,7 @@ class Jobs(Controller):
             address = str(job[0]['address1']) + ' '  + str(job[0]['city']) + ' '  + str(job[0]['zipcode'])
         
         latlong = self.models['Job'].job_location_latitude_longtitude(address)
-        bids = self.models['Bid'].show_job_bids(job_id)
+
         return self.load_view('/jobs/show.html', job=job[0], latlong=latlong, bids=bids)
 
     def edit(self, job_id):
