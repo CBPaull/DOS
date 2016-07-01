@@ -41,12 +41,12 @@ class User(Model):
     def show_addresses(self, user_id):
         info = { 'user_id': user_id }
         query = "SELECT address1, city, zipcode, apartment, state, home FROM users " \
-                "LEFT JOIN users_has_addresses ON users.id = users_has_addresses.users_id " \
-                "LEFT JOIN addresses ON users_has_addresses.addresses_id = addresses.id " \
+                "LEFT JOIN users_has_addresses ON users.id = users_has_addresses.user_id " \
+                "LEFT JOIN addresses ON users_has_addresses.address_id = addresses.id " \
                 "WHERE users.id = :user_id"
         addresses = self.db.query_db(query, info)
         return addresses
-
+        
 
     def show_address(self, address_id):
         info = { 'address_id': address_id }
