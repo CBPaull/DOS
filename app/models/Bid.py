@@ -33,7 +33,8 @@ class Bid(Model):
     		'id': requestform['id'],
     		'status': requestform['status'],
     		'user_id': requestform['user_id'],
-    		'job_id': requestform['job_id']
+    		'job_id': requestform['job_id'],
+    		'accepted_id': requestform['accepted_id']
     	}
 		prevquery = "SELECT status, id FROM bids WHERE id = :id"
 		prev_status = self.db.query_db(prevquery, info)
@@ -42,7 +43,7 @@ class Bid(Model):
 		if info['status']== '2':
 			rejectquery = "UPDATE bids SET status= 1, updated_at= NOW() WHERE job_id = :job_id AND id != :id"
 			self.db.query_db(rejectquery, info)
-			jobsquery = "UPDATE jobs SET status = 'closed', accepted_id = :user_id, updated_at = NOW() WHERE id= :job_id"
+			jobsquery = "UPDATE jobs SET status = 'closed', accepted_id = :accepted_id, updated_at = NOW() WHERE id= :job_id"
 			self.db.query_db(jobsquery, info)
 			employerinfo_query = "SELECT users.firstname, users.lastname, jobs.title from users join jobs on users.id = jobs.user_id join bids on jobs.id = bids.job_id WHERE jobs.id = :job_id"
 			employerinfo = self.db.query_db(employerinfo_query, info)

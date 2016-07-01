@@ -41,7 +41,7 @@ class Users(Controller):
         job_services = self.models['Job'].get_job_by_accepted_id(user_id)
         print user
         print reviews
-
+        print job_services
         print jobs_posts
         return self.load_view('/users/show.html',
                               user=user[0],

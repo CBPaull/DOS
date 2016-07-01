@@ -74,12 +74,13 @@
 						<td>Pending</td>
 						{% endif %}
 						<td>	
-							{% if job['job_status'] == 'open' or job['job_status'] == 'closed' %}
+							{% if job['job_status'] == 'open' %}
 							{% if job['user_id'] == session['id'] %}
 							<form action="/jobs/changebidstatus" method="POST">
 								<input type="hidden" name="id" value="{{ bid['id'] }}">
 								<input type="hidden" name="status" value="2">
 								<input type="hidden" name="user_id" value="{{ session['id'] }}">
+								<input type="hidden" name="accepted_id" value ="{{ bid['user_id'] }}">
 								<input type="hidden" name="job_id" value="{{ job['job_id'] }}">
 								<input type="submit" name="submit" value="Accept Bid">
 								<!-- color accept button green -->
@@ -88,6 +89,7 @@
 								<input type="hidden" name="id" value="{{ bid['id'] }}">
 								<input type="hidden" name="status" value="1">
 								<input type="hidden" name="user_id" value="{{ session['id'] }}">
+								<input type="hidden" name="accepted_id" value ="{{ bid['user_id'] }}">
 								<input type="hidden" name="job_id" value="{{ job['job_id'] }}">
 								<input type="submit" name="submit" value="Reject Bid">
 								<!-- color accept button red -->

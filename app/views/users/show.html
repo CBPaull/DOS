@@ -45,7 +45,7 @@
 						</div>
 						<div class="col-md-6">
 							<h3>Servicing Current Jobs</h3>
-							{% for job in jobs_services %}	
+							{% for job in job_services %}	
 								<p><a href="/jobs/show/{{ job['job_id'] }}">{{ job['job_title'] }}</a> </p>
 								<p>Scheduled for: {{ job['job_time'] }}</p>
 								<p></p>
