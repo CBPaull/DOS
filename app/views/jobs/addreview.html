@@ -3,6 +3,7 @@
 <!--To be added, page showing all users.  -->
 <div class="container">
 	<h2>Adding a new job review:</h2>
+	{% if session['id'] == job['accepted_id']: %}
 	<form action="/jobs/create_review" method="post">
 		<div class="input-group">
 			<input type="hidden" name="user_id" value="{{ session['id'] }}">
@@ -25,6 +26,9 @@
 			<button class="btn" type="submit">Submit Review</button>
 		</div>
 	</form>
+	{% else: %}
+	<h3>Error!  You were not contracted for this job.</h3>
+	{% endif %}
 </div>
 <script src="/static/js/rating.min.js"></script>
 <script type="text/javascript">

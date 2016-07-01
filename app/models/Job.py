@@ -1,5 +1,6 @@
 from system.core.model import Model
-import urllib, json
+import urllib
+import json
 
 JOB_STATUS = ['open', 'closed', 'completed', 'failed']
 
@@ -24,7 +25,7 @@ class Job(Model):
         data = {
             'job_id': job_id
         }
-        query = "SELECT jobs.id AS 'job_id', jobs.title AS 'job_title', jobs.description AS 'job_description', " \
+        query = "SELECT jobs.id AS 'job_id', jobs.title AS 'job_title', jobs.price AS 'price', jobs.description AS 'job_description', " \
                 "jobs.user_id, jobs.time AS 'job_time', jobs.created_at AS 'posted_at', users.firstname AS 'firstname', "\
                 "users.lastname AS 'lastname', users.email AS 'email', users.phone AS 'phone', addresses.address1, " \
                 "addresses.apartment, addresses.city, addresses.zipcode, jobs.status AS job_status, addresses.state  " \
@@ -42,10 +43,26 @@ class Job(Model):
         query = "SELECT jobs.id AS 'job_id', jobs.title AS 'job_title', jobs.description AS 'job_description', " \
                 "user_id, jobs.time AS 'job_time', jobs.created_at AS 'posted_at', users.firstname AS 'firstname', " \
                 "users.lastname AS 'lastname', users.email AS 'email', users.phone AS 'phone', addresses.address1, " \
-                "addresses.apartment, addresses.city, addresses.zipcode, jobs.status, addresses.state    FROM jobs " \
+                "addresses.apartment, addresses.city, addresses.zipcode, jobs.status, addresses.state   " \
+                " FROM jobs " \
                 "JOIN users ON jobs.user_id = users.id  JOIN jobs_has_addresses ON jobs.id = jobs_has_addresses.job_id" \
-                " JOIN addresses ON jobs_has_addresses.address_id = address.id " \
-                "WHERE user.id = :user_id; "
+                " JOIN addresses ON jobs_has_addresses.address_id = addresses.id " \
+                "WHERE users.id = :user_id; "
+        jobs = self.db.query_db(query, data)
+        return jobs
+
+    def get_job_by_accepted_id(self, user_id):
+        data = {
+            'user_id': user_id
+        }
+        query = "SELECT jobs.id AS 'job_id', jobs.title AS 'job_title', jobs.description AS 'job_description', " \
+                "user_id, jobs.time AS 'job_time', jobs.created_at AS 'posted_at', users.firstname AS 'firstname', " \
+                "users.lastname AS 'lastname', users.email AS 'email', users.phone AS 'phone', addresses.address1, " \
+                "addresses.apartment, addresses.city, addresses.zipcode, jobs.status, addresses.state   " \
+                " FROM jobs " \
+                "JOIN users ON jobs.user_id = users.id  JOIN jobs_has_addresses ON jobs.id = jobs_has_addresses.job_id" \
+                " JOIN addresses ON jobs_has_addresses.address_id = addresses.id " \
+                "WHERE jobs.accepted_id = :user_id; "
         jobs = self.db.query_db(query, data)
         return jobs
 
@@ -58,13 +75,14 @@ class Job(Model):
         data = {
             'title': input_form['title'],
             'description': input_form['description'],
+            'price': input_form['price'],
             'user_id': input_form['user_id'],
             'time': event_datetime,
             'status': JOB_STATUS[0]
         }
         print data
-        query = "INSERT INTO jobs(title, description, user_id, time, status, created_at, updated_at) " \
-                "VALUES (:title, :description, :user_id, :time, :status, NOW(), NOW());"
+        query = "INSERT INTO jobs(title, description, price, user_id, time, status, created_at, updated_at) " \
+                "VALUES (:title, :description, :price, :user_id, :time, :status, NOW(), NOW());"
         job_id = self.db.query_db(query, data)
         print "job_id", job_id
         data2 = {

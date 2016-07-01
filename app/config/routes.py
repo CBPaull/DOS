@@ -2,6 +2,10 @@ from system.core.router import routes
 
 # Default Welcome Page.  Render
 routes['default_controller'] = 'Users'
+# About Page
+routes['/about'] = 'Web#about'
+# Contact Page
+routes['/contact'] = 'Web#contact'
 # Login Registration Page. Render
 routes['/users/logreg'] = 'Users#index'
 # Show all users. Render

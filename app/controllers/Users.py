@@ -29,14 +29,24 @@ class Users(Controller):
         user = self.models['User'].show_user(u_id)
         address = self.models['User'].show_addressesf
         jobs = self.models['Job'].get_jobs_by_userid(u_id)
-        return self.load_view('/users/dashboard_employer.html', user=user, address=address, jobs=jobs)
+        return self.load_view('/users/dashboard_employer.html',
+                              user=user,
+                              address=address,
+                              jobs=jobs)
 
     def show(self, user_id):
         user = self.models['User'].show_user(user_id)
         reviews = self.models['Review'].get_reviews_for_id(user_id)
+        jobs_posts = self.models['Job'].get_jobs_by_userid(user_id)
+        job_services = self.models['Job'].get_job_by_accepted_id(user_id)
         print user
         print reviews
-        return self.load_view('/users/show.html', user=user[0], reviews=reviews)
+        print jobs_posts
+        return self.load_view('/users/show.html',
+                              user=user[0],
+                              reviews=reviews,
+                              jobs_posts=jobs_posts,
+                              job_services=job_services)
 
     def edit(self, user_id):
         user = self.models['User'].show_user(user_id)
@@ -69,7 +79,7 @@ class Users(Controller):
                 flash(error)
             return redirect('/')
 
-    def update(self, u_id):
+    def update(self, user_id):
         update_status = self.models['User'].update_user(requestform)
         return redirect('/users/vendor/'+str(session['id']))
         # POST pass requestform to model update
