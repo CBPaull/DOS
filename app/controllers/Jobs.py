@@ -66,8 +66,12 @@ class Jobs(Controller):
             return redirect('/jobs/edit/' + str(update_status['job_id']))
 
     def confirm(self, job_id):
-        # Process job status to 'closed'. Redirect
-        self.models['Job'].job_change_status(job_id, 1)
+        # Process job status to 'completed'. Redirect
+        self.models['Job'].job_change_status(job_id, 2)
+        # sending email out to job posters and contractors
+        # users = self.models['Job'].get_users_from_job(job_id)
+        # job = self.models['Job'].get_job_by_id(job_id)
+        # self.models['Email'].send_review_emails(users, job)
         return redirect('/jobs/show/' + str(job_id))
 
     def destroy(self, job_id):
@@ -122,4 +126,3 @@ class Jobs(Controller):
         print "input form review", input_form
         review_status = self.models['Review'].create_review(input_form)
         return redirect('/users/show/'+str(session['id']))
-

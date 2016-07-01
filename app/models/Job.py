@@ -17,6 +17,7 @@ class Job(Model):
                 "addresses.apartment, addresses.city, addresses.zipcode, addresses.state   FROM jobs " \
                 "JOIN users ON jobs.user_id = users.id  JOIN jobs_has_addresses ON jobs.id = jobs_has_addresses.job_id" \
                 " JOIN addresses ON jobs_has_addresses.address_id = addresses.id " \
+                "WHERE jobs.status = 'open' " \
                 "ORDER BY jobs.created_at DESC; "
         all_jobs = self.db.query_db(query)
         return all_jobs
@@ -28,7 +29,8 @@ class Job(Model):
         query = "SELECT jobs.id AS 'job_id', jobs.title AS 'job_title', jobs.price AS 'price', jobs.description AS 'job_description', " \
                 "jobs.user_id, jobs.time AS 'job_time', jobs.created_at AS 'posted_at', users.firstname AS 'firstname', "\
                 "users.lastname AS 'lastname', users.email AS 'email', users.phone AS 'phone', addresses.address1, " \
-                "addresses.apartment, addresses.city, addresses.zipcode, jobs.status AS job_status, addresses.state  " \
+                "addresses.apartment, addresses.city, addresses.zipcode, jobs.status AS job_status, addresses.state,  " \
+                "jobs.status AS job_status " \
                 " FROM jobs " \
                 "JOIN users ON jobs.user_id = users.id  JOIN jobs_has_addresses ON jobs.id = jobs_has_addresses.job_id" \
                 " JOIN addresses ON jobs_has_addresses.address_id = addresses.id " \
@@ -43,6 +45,7 @@ class Job(Model):
         query = "SELECT jobs.id AS 'job_id', jobs.title AS 'job_title', jobs.description AS 'job_description', " \
                 "user_id, jobs.time AS 'job_time', jobs.created_at AS 'posted_at', users.firstname AS 'firstname', " \
                 "users.lastname AS 'lastname', users.email AS 'email', users.phone AS 'phone', addresses.address1, " \
+                "jobs.status AS job_status, " \
                 "addresses.apartment, addresses.city, addresses.zipcode, jobs.status, addresses.state   " \
                 " FROM jobs " \
                 "JOIN users ON jobs.user_id = users.id  JOIN jobs_has_addresses ON jobs.id = jobs_has_addresses.job_id" \
@@ -65,6 +68,22 @@ class Job(Model):
                 "WHERE jobs.accepted_id = :user_id; "
         jobs = self.db.query_db(query, data)
         return jobs
+
+    def get_users_from_job(self, job_id):
+        data = {
+            'job_id': job_id
+        }
+        query = "SELECT firstname, lastname, users.created_at AS created_at, users.updated_at AS updated_at, " \
+                "email, phone, servicename, jobs.user_id AS user_id FROM jobs " \
+                "JOIN users ON jobs.user_id = users.id " \
+                "WHERE job_id = :job_id"
+        user = self.db.query_db(query, data)
+        query2 = "SELECT firstname, lastname, users.created_at AS created_at, users.updated_at AS updated_at, " \
+                "email, phone, servicename, jobs.user_id AS user_id FROM jobs " \
+                "JOIN users ON jobs.accepted_id = users.id " \
+                "WHERE job_id = :job_id"
+        accepted = self.db.query_db(query2, data)
+        return {'user': user, 'accepted': accepted}
 
     def create_job(self, input_form):
         # ToDo - add skills
