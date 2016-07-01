@@ -29,9 +29,9 @@ class Jobs(Controller):
         
         for signed_in_user_address in user_address:
             if len(signed_in_user_address['apartment']) != 0:
-                signed_in_address = str(signed_in_user_address['address1']) + ' ' + str(signed_in_user_address['apartment']) + ' '  + str(signed_in_user_address['city']) + ' '  + str(signed_in_user_address['zipcode'])
+                address = str(signed_in_user_address['address1']) + ' ' + str(signed_in_user_address['apartment']) + ' '  + str(signed_in_user_address['city']) + ' '  + str(signed_in_user_address['zipcode'])
             else:
-                signed_in_address = str(signed_in_user_address['address1']) + ' '  + str(signed_in_user_address['city']) + ' '  + str(signed_in_user_address['zipcode'])
+                address = str(signed_in_user_address['address1']) + ' '  + str(signed_in_user_address['city']) + ' '  + str(signed_in_user_address['zipcode'])
             
             latlong = self.models['Job'].job_location_latitude_longtitude(address)
             
@@ -47,12 +47,12 @@ class Jobs(Controller):
     def show(self, job_id):
         # Show job by job_id. Render
         job = self.models['Job'].get_job_by_id(job_id)
+        bids = self.models['Bid'].show_job_bids(job_id)
 
         if len(job[0]['apartment']) != 0:
             address = str(job[0]['address1']) + ' ' + str(job[0]['apartment']) + ' '  + str(job[0]['city']) + ' '  + str(job[0]['zipcode'])
         else:
             address = str(job[0]['address1']) + ' '  + str(job[0]['city']) + ' '  + str(job[0]['zipcode'])
-        
         latlong = self.models['Job'].job_location_latitude_longtitude(address)
 
         return self.load_view('/jobs/show.html', job=job[0], latlong=latlong, bids=bids)
